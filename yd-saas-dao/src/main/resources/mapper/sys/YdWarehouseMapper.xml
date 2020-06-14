@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiding.saas.ydsaas.dao.YdWarehouseMapper">
+
+    <select id="findPageList" resultType="com.yiding.saas.ydsaas.model.YdWarehouseLogDO">
+        SELECT a.id,a.rfid,b.tobacco_name AS tobaccoName,b.tobacco_level AS tobaccoLevel,
+        a.count,a.unit,a.tobacco_station AS tobaccoStation,a.create_by AS createBy
+        ,DATE_FORMAT(a.`create_date`,'%Y-%c-%d %h:%i' ) AS createDate,a.package_type AS packageType,a.weight_log AS weightLog
+        FROM yd_basics_warehouse_log a LEFT JOIN yd_tobacco b ON a.`tobacco_id`=b.`id`
+        <where>
+            a.`in_out_type`=#{inOutType} AND a.`is_valid`=#{isValid}
+            <if test=" status != null">
+                AND a.`status`=#{status}
+            </if>
+            <if test=" packageType != null and packageType!=''">
+                AND a.`package_type`=#{packageType}
+            </if>
+            <if test=" rfid!= null and rfid!=''">
+                AND a.rfid=#{rfid}
+            </if>
+            <if test=" repertoryId != 0 and repertoryId != null">
+                AND a.org_id=#{repertoryId}
+            </if>
+            <if test=" startDate != null and startDate != ''">
+                <![CDATA[and DATE_FORMAT(a.in_out_date, '%Y-%m-%d %H:%M' )>=  DATE_FORMAT(#{startDate}, '%Y-%m-%d %H:%M')   ]]>
+            </if>
+            <if test=" endDate != null and endDate != ''">
+                <![CDATA[and DATE_FORMAT(a.in_out_date, '%Y-%m-%d %H:%M')<=  DATE_FORMAT(#{endDate}, '%Y-%m-%d %H:%M')   ]]>
+            </if>
+            <if test=" tobaccoStation!= null and tobaccoStation != ''">
+                AND a.tobacco_station=#{tobaccoStation}
+            </if>
+            AND (
+            <foreach collection="list" item="item" index="index">
+                <if test="index != 0">
+                    OR
+                </if>
+                a.org_ids LIKE concat(concat('%',#{item}),'%')
+            </foreach>
+            )
+        </where>
+        ORDER BY
+        a.`create_date` DESC LIMIT #{pageNum},#{pageSize}
+    </select>
+    <select id="getCounts" resultType="java.lang.Integer">
+        SELECT DISTINCT COUNT(*) from yd_basics_warehouse_log a LEFT JOIN yd_tobacco b ON a.`tobacco_id`=b.`id`
+        <where>
+            a.`in_out_type`=#{inOutType}  AND a.`is_valid`=#{isValid}
+            <if test=" status != null">
+                AND a.`status`=#{status}
+            </if>
+            <if test=" packageType != null and packageType != ''">
+                AND a.package_type=#{packageType}
+            </if>
+            <if test=" rfid != null and rfid != ''">
+                AND a.rfid=#{rfid}
+            </if>
+            <if test=" repertoryId != 0 and repertoryId != null">
+                AND a.org_id=#{repertoryId}
+            </if>
+            <if test=" startDate != null and startDate != ''">
+                <![CDATA[and DATE_FORMAT(a.in_out_date, '%Y-%m-%d %H:%M')>=  DATE_FORMAT(#{startDate}, '%Y-%m-%d %H:%M')   ]]>
+            </if>
+            <if test=" endDate != null and endDate != ''">
+                <![CDATA[and DATE_FORMAT(a.in_out_date, '%Y-%m-%d %H:%M')<=  DATE_FORMAT(#{endDate}, '%Y-%m-%d %H:%M')   ]]>
+            </if>
+            <if test=" tobaccoStation != null and tobaccoStation != '' ">
+                AND a.tobacco_station=#{tobaccoStation}
+            </if>
+            AND (
+            <foreach collection="list" item="item" index="index">
+                <if test="index != 0">
+                    OR
+                </if>
+                a.org_ids LIKE concat(concat('%',#{item}),'%')
+            </foreach>
+            )
+        </where>
+
+    </select>
+
+    <select id="warehouseDetails" resultType="com.yiding.saas.ydsaas.model.YdWarehouseLogDO">
+        SELECT a.rfid,b.tobacco_name AS tobaccoName,b.tobacco_level AS tobaccoLevel,
+        a.count,a.unit,a.tobacco_station AS tobaccoStation,a.package_type AS packageType,
+        DATE_FORMAT(a.`package_date`,'%Y-%c-%d %h:%i' ) AS packageDate ,a.variety,a.sugar,a.nicotine,a.nitrogen,a.protein,a.in_out_type AS inOutType
+        from yd_basics_warehouse_log a LEFT JOIN yd_tobacco b ON a.`tobacco_id`=b.`id`
+        WHERE a.id=#{logId}
+    </select>
+
+    <select id="getProductInfos" resultType="com.yiding.saas.ydsaas.model.YdProductInfoDO">
+        SELECT id,address ,tabacco_grower AS tabaccoGrower,district_ids AS districtIds FROM yd_basics_product_info  WHERE log_id=#{logId}
+    </select>
+
+    <select id="getWarehouseInfo" resultType="com.yiding.saas.ydsaas.model.YdWarehouseLogDO">
+        SELECT id,weight_one AS weightOne,weight_two AS weightTwo FROM yd_basics_warehouse
+        <where>
+            1=1
+            <if test="tobaccoStation != null and tobaccoStation !='' ">
+              AND tobacco_station=#{tobaccoStation}
+            </if>
+            <if test="tobaccoId != null and tobaccoId !=0 ">
+                AND tobacco_id=#{tobaccoId}
+            </if>
+            <if test="repertoryId != null and repertoryId !=0 ">
+                AND org_id=#{repertoryId}
+            </if>
+        </where>
+
+    </select>
+
+    <select id="getDistictName" resultType="java.lang.String">
+        SELECT district_name FROM yd_district
+        WHERE id IN (
+        <foreach collection="ids" item="item" index="index" separator=",">
+           #{item}
+        </foreach>
+        )
+    </select>
+    <select id="getCounts2" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM yd_basics_warehouse a LEFT JOIN yd_tobacco b ON a.tobacco_id=b.id
+        <where>
+            a.`is_valid`=#{isValid}
+            <if test=" status != null">
+                AND   a.`status`=#{status}
+            </if>
+            <if test="tobaccoStation != null and tobaccoStation != '' " >
+                AND tobacco_station=#{tobaccoStation}
+            </if>
+            <if test="repertoryId != null and repertoryId != 0" >
+                AND org_id=#{repertoryId}
+            </if>
+            <if test=" startDate != null and startDate != ''">
+                <![CDATA[and DATE_FORMAT(a.create_date, '%Y-%m-%d %H:%M')>=  DATE_FORMAT(#{startDate}, '%Y-%m-%d %H:%M')   ]]>
+            </if>
+            <if test=" endDate != null and endDate != ''">
+                <![CDATA[and DATE_FORMAT(a.create_date, '%Y-%m-%d %H:%M')<=  DATE_FORMAT(#{endDate}, '%Y-%m-%d %H:%M')   ]]>
+            </if>
+            AND (
+            <foreach collection="list" item="item" index="index">
+                <if test="index != 0">
+                    OR
+                </if>
+                a.org_ids LIKE concat(concat('%',#{item}),'%')
+            </foreach>
+            )
+            AND (
+            <foreach collection="list2" item="item" index="index">
+                <if test="index != 0">
+                    OR
+                </if>
+                a.district_id = #{item}
+            </foreach>
+            )
+        </where>
+    </select>
+
+    <select id="findPageWarehouseList" resultType="com.yiding.saas.ydsaas.model.YdWarehouseDO">
+        SELECT a.id,a.org_id AS orgId,a.org_ids AS orgIds,b.tobacco_level AS tobaccoLevel,b.tobacco_name AS tobaccoName,a.package_date AS packageDate,
+        a.package_type AS packageType,a.tobacco_station AS tobaccoStation,a.status,a.create_by AS createBy,a.create_date AS createDate,a.is_valid AS isValid,
+        a.weight_one AS weightOne,a.unit_one AS unitOne,a.weight_two AS weightTwo,a.unit_two AS unitTwo,a.district_id AS districtId
+        FROM yd_basics_warehouse a LEFT JOIN yd_tobacco b ON a.tobacco_id=b.id
+        <where>
+            a.is_valid=#{isValid}
+            <if test=" status != null">
+                AND a.`status`=#{status}
+            </if>
+            <if test="tobaccoStation != null" >
+                  AND a.tobacco_station=#{tobaccoStation}
+            </if>
+            <if test="repertoryId != null and repertoryId != 0" >
+                AND a.org_id=#{repertoryId}
+            </if>
+            AND (
+            <foreach collection="list" item="item" index="index">
+                <if test="index != 0">
+                    OR
+                </if>
+                a.org_ids LIKE concat(concat('%',#{item}),'%')
+            </foreach>
+            )
+            AND (
+            <foreach collection="list2" item="item" index="index">
+                <if test="index != 0">
+                    OR
+                </if>
+                a.district_id = #{item}
+            </foreach>
+            )
+        </where>
+        ORDER BY a.create_date DESC limit #{pageNum},#{pageSize}
+    </select>
+
+    <select id="findPageWarehouseList2" resultType="com.yiding.saas.ydsaas.model.YdWarehouseDO">
+        SELECT a.id,a.org_id AS orgId,a.org_ids AS orgIds,b.tobacco_level AS tobaccoLevel,b.tobacco_name AS tobaccoName,a.package_date AS packageDate,
+        a.package_type AS packageType,a.tobacco_station AS tobaccoStation,a.status,a.create_by AS createBy,a.create_date AS createDate,a.is_valid AS isValid,
+        a.weight_one AS weightOne,a.unit_one AS unitOne,a.weight_two AS weightTwo,a.unit_two AS unitTwo,a.district_id AS districtId
+        FROM yd_basics_warehouse a LEFT JOIN yd_tobacco b ON a.tobacco_id=b.id
+        <where>
+            a.is_valid=#{isValid}
+            <if test=" status != null">
+                AND a.`status`=#{status}
+            </if>
+            <if test="tobaccoStation != null" >
+                AND a.tobacco_station=#{tobaccoStation}
+            </if>
+            <if test="repertoryId != null and repertoryId != 0" >
+                AND a.org_id=#{repertoryId}
+            </if>
+            AND (
+            <foreach collection="list" item="item" index="index">
+                <if test="index != 0">
+                    OR
+                </if>
+                a.org_ids LIKE concat(concat('%',#{item}),'%')
+            </foreach>
+            )
+            AND (
+            <foreach collection="list2" item="item" index="index">
+                <if test="index != 0">
+                    OR
+                </if>
+                a.district_id = #{item}
+            </foreach>
+            )
+        </where>
+
+    </select>
+
+    <select id="findWarehouseList" resultType="com.yiding.saas.ydsaas.model.YdWarehousePercentDO">
+        SELECT DISTINCT a.org_id AS repertoryId,b.org_name AS repertoryName,a.tobacco_station AS tobaccoStation
+        FROM yd_basics_warehouse a LEFT JOIN yd_organization b ON a.org_id=b.id
+        <where>
+             a.is_valid=#{isValid}
+            <if test=" status != null">
+                AND a.`status`=#{status}
+            </if>
+            <if test="tobaccoStation != null" >
+                AND a.tobacco_station=#{tobaccoStation}
+            </if>
+            <if test="repertoryId != null and repertoryId != 0" >
+                AND a.org_id=#{repertoryId}
+            </if>
+            AND (
+            <foreach collection="list" item="item" index="index">
+                <if test="index != 0">
+                    OR
+                </if>
+                a.org_ids LIKE concat(concat('%',#{item}),'%')
+            </foreach>
+            )
+            AND (
+            <foreach collection="list2" item="item" index="index">
+                <if test="index != 0">
+                    OR
+                </if>
+                a.district_id = #{item}
+            </foreach>
+            )
+        </where>
+    </select>
+
+    <select id="getSonIdLists" resultType="java.lang.Integer">
+        SELECT id FROM yd_district WHERE parent_id=#{parentId}
+    </select>
+    <select id="getDistrictId" resultType="java.lang.Integer">
+        SELECT id FROM yd_district
+        <where>
+            parent_id IN (
+            <foreach collection="list" item="item" index="index" separator=",">
+               #{item}
+            </foreach>
+            )
+        </where>
+    </select>
+    <select id="getTobaccoLevels" resultType="com.yiding.saas.ydsaas.model.YdTobacco">
+        SELECT id,tobacco_name AS tobaccoName,tobacco_level AS tobaccoLevel FROM yd_tobacco
+    </select>
+    <select id="getRepertory" resultType="com.yiding.saas.ydsaas.model.YdWarehouseLogDO">
+        SELECT a.weight_log AS weightLog,b.tobacco_level AS tobaccoLevel,b.tobacco_name AS tobaccoName FROM yd_basics_warehouse_log a
+        LEFT JOIN yd_tobacco b ON a.tobacco_id=b.id
+        <where>
+            a.`in_out_type`=#{inOutType}   AND a.`is_valid`=#{isValid}
+            <if test=" status != null">
+                AND a.`status`=#{status}
+            </if>
+            <if test=" packageType != null and packageType != ''">
+                AND a.package_type=#{packageType}
+            </if>
+            <if test=" rfid != null and rfid != ''">
+                AND a.rfid=#{rfid}
+            </if>
+            <if test=" startDate != null and startDate != ''">
+                <![CDATA[and DATE_FORMAT(a.create_date, '%Y-%m-%d %H:%M')>=  DATE_FORMAT(#{startDate}, '%Y-%m-%d %H:%M')   ]]>
+            </if>
+            <if test=" endDate != null and endDate != ''">
+                <![CDATA[and DATE_FORMAT(a.create_date, '%Y-%m-%d %H:%M')<=  DATE_FORMAT(#{endDate}, '%Y-%m-%d %H:%M')   ]]>
+            </if>
+            <if test=" tobaccoStation != null and tobaccoStation != ''">
+                AND a.tobacco_station=#{tobaccoStation}
+            </if>
+            <if test=" repertoryId != 0 and repertoryId != null ">
+                AND a.org_id=#{repertoryId}
+            </if>
+        AND (
+        <foreach collection="list2" item="item" index="index">
+            <if test="index != 0">
+                OR
+            </if>
+            a.org_ids LIKE concat(concat('%',#{item}),'%')
+        </foreach>
+        )
+        </where>
+    </select>
+
+    <select id="getRepertoryNames" resultType="java.lang.String">
+        SELECT DISTINCT b.org_name AS orgName FROM yd_basics_warehouse_log a
+        LEFT JOIN yd_organization b ON a.org_id=b.id
+        <where>
+            a.`in_out_type`=#{inOutType}  AND a.`is_valid`=#{isValid}
+            <if test=" status != null">
+                AND a.`status`=#{status}
+            </if>
+            <if test=" packageType != null and packageType != ''">
+                AND a.package_type=#{packageType}
+            </if>
+            <if test=" rfid != null and rfid != ''">
+                AND a.rfid=#{rfid}
+            </if>
+            <if test=" startDate != null and startDate != ''">
+                <![CDATA[and DATE_FORMAT(a.create_date, '%Y-%m-%d %H:%M')>=  DATE_FORMAT(#{startDate}, '%Y-%m-%d %H:%M')   ]]>
+            </if>
+            <if test=" endDate != null and endDate != ''">
+                <![CDATA[and DATE_FORMAT(a.create_date, '%Y-%m-%d %H:%M')<=  DATE_FORMAT(#{endDate}, '%Y-%m-%d %H:%M')   ]]>
+            </if>
+            <if test=" tobaccoStation != null and tobaccoStation != ''">
+                AND a.tobacco_station=#{tobaccoStation}
+            </if>
+            <if test=" repertoryId != 0 and repertoryId != null ">
+                AND a.org_id=#{repertoryId}
+            </if>
+            AND (
+            <foreach collection="list2" item="item" index="index">
+                <if test="index != 0">
+                    OR
+                </if>
+                a.org_ids LIKE concat(concat('%',#{item}),'%')
+            </foreach>
+            )
+        </where>
+    </select>
+
+    <select id="findPageByRfidList" resultType="com.yiding.saas.ydsaas.model.YdWarehouseLogDO">
+        SELECT a.id,a.rfid,b.tobacco_name AS tobaccoName,b.tobacco_level AS tobaccoLevel,
+        a.count,a.unit,a.tobacco_station AS tobaccoStation,a.create_by AS createBy
+        ,DATE_FORMAT(a.`create_date`,'%Y-%c-%d %H:%i' ) AS createDate,a.package_type AS packageType,a.weight_log AS weightLog
+        FROM yd_basics_warehouse_log a LEFT JOIN yd_tobacco b ON a.`tobacco_id`=b.`id`
+        <where>
+            a.`in_out_type`=#{inOutType}  AND a.`package_type`=#{packageType} AND a.`is_valid`=#{isValid}
+            <if test=" status != null">
+                AND a.`status`=#{status}
+            </if>
+           AND a.rfid IN (
+            <foreach collection="list" item="item" index="index" separator=",">
+                 #{item}
+            </foreach>
+            )
+        </where>
+        ORDER BY
+        a.`create_date` DESC LIMIT #{pageNum},#{pageSize}
+    </select>
+
+    <select id="findByRfidList" resultType="com.yiding.saas.ydsaas.model.YdWarehouseLogDO">
+        SELECT a.id,a.rfid,b.tobacco_name AS tobaccoName,b.tobacco_level AS tobaccoLevel,
+        a.count,a.unit,a.tobacco_station AS tobaccoStation,a.create_by AS createBy
+        ,DATE_FORMAT(a.`create_date`,'%Y-%c-%d %H:%i' ) AS createDate,a.package_type AS packageType,a.weight_log AS weightLog
+        FROM yd_basics_warehouse_log a LEFT JOIN yd_tobacco b ON a.`tobacco_id`=b.`id`
+        <where>
+             a.`is_valid`=#{isValid} AND
+             a.in_out_type=0 AND
+             a.status=0 AND
+             a.rfid IN (
+            <foreach collection="list" item="item" index="index" separator=",">
+                #{item}
+            </foreach>
+            )
+        </where>
+
+    </select>
+
+    <select id="findByRfids" resultType="com.yiding.saas.ydsaas.model.YdWarehouseLogDO">
+        SELECT a.id,a.rfid,a.org_id AS repertoryId,a.org_ids AS orgIds,a.variety,a.weight,
+        a.sugar,a.nitrogen,a.protein,a.nitrogen,
+        b.tobacco_name AS tobaccoName,b.tobacco_level AS tobaccoLevel,
+        a.count,a.unit,a.tobacco_station AS tobaccoStation,a.create_by AS createBy
+        ,DATE_FORMAT(a.`create_date`,'%Y-%c-%d %H:%i:%s' ) AS createDate,a.package_type AS packageType
+        ,DATE_FORMAT(a.`package_date`,'%Y-%c-%d %H:%i:%s' ) AS packageDate,
+        a.weight_log AS weightLog
+        FROM yd_basics_warehouse_log a LEFT JOIN yd_tobacco b ON a.`tobacco_id`=b.`id`
+        <where>
+            a.`in_out_type`=#{inOutType} AND a.`is_valid`=#{isValid}
+            <if test=" status != null">
+                AND a.`status`=#{status}
+            </if>
+            <if test=" packageType != null and packageType != '' ">
+                AND a.`package_type`=#{packageType}
+            </if>
+            AND a.rfid IN (
+            <foreach collection="list2" item="item" index="index" separator=",">
+                #{item}
+            </foreach>
+            )
+        </where>
+
+    </select>
+
+
+    <select id="getCounts3" resultType="java.lang.Integer">
+        SELECT count(*)
+        FROM yd_basics_warehouse_log a LEFT JOIN yd_tobacco b ON a.`tobacco_id`=b.`id`
+        <where>
+            a.`in_out_type`=#{inOutType} AND a.`status`=#{status} AND a.`package_type`=#{packageType} AND a.`is_valid`=#{isValid}
+            AND a.rfid IN (
+            <foreach collection="list" item="item" index="index" separator=",">
+                #{item}
+            </foreach>
+            )
+        </where>
+    </select>
+    <select id="findLogInfoById" resultMap="YdBasicsWarehouseLogMap">
+        SELECT
+        <include refid="logColumn"></include>
+        FROM yd_basics_warehouse_log
+        WHERE id=#{logId}
+    </select>
+    <update id="updateWarehouse">
+        UPDATE yd_basics_warehouse
+        SET
+        weight_one=#{weightOne},
+        weight_two=#{weightTwo},
+        tobacco_id=#{tobaccoId}
+        WHERE org_id=#{repertoryId} AND tobacco_id=#{tobaccoId} AND tobacco_station=#{tobaccoStation}
+    </update>
+    <update id="updateLogInfo">
+         UPDATE yd_basics_warehouse_log
+        SET
+        org_id=#{repertoryId},
+        tobacco_id=#{tobaccoId}
+        WHERE id=#{id}
+    </update>
+    <update id="updateProductInfo">
+        UPDATE yd_basics_product_info
+        SET
+        address=#{address}
+    </update>
+    <insert id="saveLogInfo" parameterType="com.yiding.saas.ydsaas.model.YdWarehouseLogDO">
+        <selectKey keyProperty="id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO yd_basics_warehouse_log (
+        org_id,org_ids,in_out_date,in_out_type,rfid,tobacco_id,package_date,package_type,
+        count,unit,weight,tobacco_station,repet_tobacco_station,status,sugar,nicotine,nitrogen,
+        protein,create_by,create_date,is_valid,weight_log
+        ) VALUES (
+        #{repertoryId},#{orgIds},#{inOutDate},#{inOutType},#{rfid},#{tobaccoId},#{packageDate},#{packageType},
+        #{count},#{unit},#{weight},#{tobaccoStation},#{repetTobaccoStation},#{status},#{sugar},#{nicotine},
+        #{nitrogen},#{protein},#{createBy},#{createDate},#{isValid},#{weightLog}
+        )
+    </insert>
+    <insert id="saveProductInfo" parameterType="com.yiding.saas.ydsaas.model.YdWarehouseLogDO">
+        INSERT INTO yd_basics_product_info (address,tabacco_grower,log_id,district_ids) VALUES
+        <foreach collection="list" index="index" item="item" separator=",">
+            (#{item.address},#{item.tabaccoGrower},#{id},#{districtIds})
+        </foreach>
+    </insert>
+    <insert id="saveWarehouse" parameterType="com.yiding.saas.ydsaas.model.YdWarehouseLogDO">
+        INSERT INTO yd_basics_warehouse (id,org_id,org_ids,tobacco_id,package_date,package_type,
+        tobacco_station,status,create_by,create_date,is_valid,
+        weight_one,unit_one,weight_two,unit_two,district_id
+        ) VALUES (
+        #{id},#{repertoryId},#{orgIds},#{tobaccoId},#{packageDate},#{packageType},
+        #{tobaccoStation},#{status},#{createBy},#{createDate},#{isValid}
+        ,#{weightOne},#{unitOne},#{weightTwo},#{unitTwo},#{districtId}
+        )
+        ON DUPLICATE KEY
+        UPDATE
+        weight_one=#{weightOne},
+        weight_two=#{weightTwo}
+    </insert>
+    <sql id="logColumn">
+        id,org_id,org_ids,in_out_date,in_out_type,rfid,tobacco_id,package_date,package_type,
+        count,unit,weight,tobacco_station,repet_tobacco_station,status,sugar,nicotine,nitrogen,
+        protein,create_by,create_date,is_valid,weight_log
+    </sql>
+    <resultMap id="YdBasicsWarehouseLogMap" type="com.yiding.saas.ydsaas.model.YdWarehouseLogDO">
+            <result property="id" column="id" jdbcType="INTEGER"/>
+            <result property="orgId" column="org_id" jdbcType="INTEGER"/>
+            <result property="orgIds" column="org_ids" jdbcType="VARCHAR"/>
+            <result property="inOutDate" column="in_out_date" jdbcType="TIMESTAMP"/>
+            <result property="inOutType" column="in_out_type" jdbcType="VARCHAR"/>
+            <result property="rfid" column="rfid" jdbcType="VARCHAR"/>
+            <result property="tobaccoId" column="tobacco_id" jdbcType="INTEGER"/>
+            <result property="variety" column="variety" jdbcType="VARCHAR"/>
+            <result property="packageDate" column="package_date" jdbcType="TIMESTAMP"/>
+            <result property="packageType" column="package_type" jdbcType="VARCHAR"/>
+            <result property="count" column="count" jdbcType="OTHER"/>
+            <result property="unit" column="unit" jdbcType="VARCHAR"/>
+            <result property="weight" column="weight" jdbcType="VARCHAR"/>
+            <result property="weightLog" column="weight_log" jdbcType="VARCHAR"/>
+            <result property="tobaccoStation" column="tobacco_station" jdbcType="VARCHAR"/>
+            <result property="repetTobaccoStation" column="repet_tobacco_station" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="sugar" column="sugar" jdbcType="VARCHAR"/>
+            <result property="nicotine" column="nicotine" jdbcType="VARCHAR"/>
+            <result property="nitrogen" column="nitrogen" jdbcType="VARCHAR"/>
+            <result property="protein" column="protein" jdbcType="VARCHAR"/>
+            <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+            <result property="createDate" column="create_date" jdbcType="TIMESTAMP"/>
+            <result property="isValid" column="is_valid" jdbcType="INTEGER"/>
+    </resultMap>
+    <select id="getListByRfid" resultMap="YdBasicsWarehouseLogMap">
+        select * from yd_basics_warehouse_log where is_valid=0 and in_out_type=1 and status=0
+        <if test="rfids!=null and rfids.size>0">
+            and rfid in
+            <foreach collection="rfids" item="rfid" separator="," open="(" close=")">
+              #{rfid}
+            </foreach>
+        </if>
+    </select>
+    
+    <select id="findList" resultType="com.yiding.saas.ydsaas.model.YdWarehouseLogDO">
+        SELECT a.id,a.rfid,b.tobacco_name AS tobaccoName,b.tobacco_level AS tobaccoLevel,
+        a.count,a.unit,a.tobacco_station AS tobaccoStation,a.create_by AS createBy
+        ,DATE_FORMAT(a.`create_date`,'%Y-%c-%d %h:%i' ) AS createDate,a.package_type AS packageType,a.weight_log AS weightLog,
+        g.goods_state as goodsState 
+        FROM
+		yd_transport_goods g
+		LEFT JOIN yd_basics_warehouse_log a ON g.rfid_id = a.id
+		LEFT JOIN yd_tobacco b ON a.tobacco_id = b.id
+		WHERE g.transport_id = #{transportId}
+        ORDER BY
+        a.`create_date` DESC 
+    </select>
+    
+    <select id="findTodayList" resultType="com.yiding.saas.ydsaas.model.YdWarehouseLogDO">
+        SELECT a.id,a.rfid,b.tobacco_name AS tobaccoName,b.tobacco_level AS tobaccoLevel,
+        a.count,a.unit,a.tobacco_station AS tobaccoStation,a.create_by AS createBy
+        ,DATE_FORMAT(a.`create_date`,'%Y-%c-%d %h:%i' ) AS createDate,a.package_type AS packageType,a.weight_log AS weightLog,
+        g.goods_state as goodsState 
+        FROM
+		yd_transport_goods g
+		LEFT JOIN yd_basics_warehouse_log a ON g.rfid_id = a.id
+		LEFT JOIN yd_tobacco b ON a.tobacco_id = b.id
+		<where>
+             a.`is_valid`=0 
+            <if test=" istoday != null and istoday == 1">
+            	and to_days(a.in_out_date) = to_days(now()) 
+            </if>
+            <if test=" istoday != null and istoday == 2">
+            	and YEAR(a.in_out_date) = YEAR(now()) 
+            </if>
+            <if test=" inOutType != 0 and inOutType != null">
+                AND a.in_out_type=#{inOutType} 
+            </if>
+            <if test=" orgId != 0 and orgId != null">
+                AND a.org_id=#{orgId} 
+            </if>
+        </where>
+        ORDER BY
+        a.`create_date` DESC 
+    </select>
+    
+    <select id="findTobaccoWarehouseList" resultType="com.yiding.saas.ydsaas.model.YdWarehouseDO">
+        SELECT  a.id,a.org_id AS orgId,a.org_ids AS orgIds,b.tobacco_level AS tobaccoLevel,b.tobacco_name AS tobaccoName,a.package_date AS packageDate,
+        a.package_type AS packageType,a.tobacco_station AS tobaccoStation,a.status,a.create_by AS createBy,a.create_date AS createDate,a.is_valid AS isValid,
+        a.weight_one AS weightOne,a.unit_one AS unitOne,a.weight_two AS weightTwo,a.unit_two AS unitTwo,a.district_id AS districtId
+        FROM
+		yd_tobacco b  LEFT  JOIN yd_basics_warehouse a ON b.id = a.tobacco_id and a.org_id = #{repertoryId} and a.is_valid=0;
+    </select>
+</mapper>

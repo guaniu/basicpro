@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiding.saas.ydsaas.dao.YdOrganizationMapper">
+
+    <resultMap type="com.yiding.saas.ydsaas.model.YdOrganization" id="YdOrganizationMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="orgName" column="org_name" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="parentId" column="parent_id" jdbcType="INTEGER"/>
+        <result property="orgFullName" column="org_full_name" jdbcType="VARCHAR"/>
+        <result property="orderNum" column="order_num" jdbcType="INTEGER"/>
+        <result property="orgCode" column="org_code" jdbcType="VARCHAR"/>
+        <result property="orgType" column="org_type" jdbcType="VARCHAR"/>
+        <result property="orgDistrictId" column="org_district_id" jdbcType="INTEGER"/>
+        <result property="orgLongitude" column="org_longitude" jdbcType="VARCHAR"/>
+        <result property="orgLatitude" column="org_latitude" jdbcType="VARCHAR"/>
+        <result property="orgAddress" column="org_address" jdbcType="VARCHAR"/>
+        <result property="orgTele" column="org_tele" jdbcType="VARCHAR"/>
+        <result property="officalUserId" column="offical_user_id" jdbcType="INTEGER"/>
+        <result property="officalUserName" column="offical_user_name" jdbcType="VARCHAR"/>
+        <result property="orgComments" column="org_comments" jdbcType="OTHER"/>
+        <result property="orgStatus" column="org_status" jdbcType="INTEGER"/>
+        <result property="isDel" column="is_del" jdbcType="INTEGER"/>
+        <result property="storehouseVolume" column="storehouse_volume" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="YdOrganizationMap">
+        select
+          id, org_name, create_time, update_time, parent_id, org_full_name, order_num, org_code, org_type, org_district_id, org_longitude, org_latitude, org_address, org_tele, offical_user_id, offical_user_name, org_comments, org_status, is_del, storehouse_volume
+        from yd_tobacco_dev.yd_organization
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="YdOrganizationMap">
+        select
+          id, org_name, create_time, update_time, parent_id, org_full_name, order_num, org_code, org_type, org_district_id, org_longitude, org_latitude, org_address, org_tele, offical_user_id, offical_user_name, org_comments, org_status, is_del, storehouse_volume
+        from yd_tobacco_dev.yd_organization
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="YdOrganizationMap">
+        select
+          id, org_name, create_time, update_time, parent_id, org_full_name, order_num, org_code, org_type, org_district_id, org_longitude, org_latitude, org_address, org_tele, offical_user_id, offical_user_name, org_comments, org_status, is_del, storehouse_volume
+        from yd_tobacco_dev.yd_organization
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="orgName != null and orgName != ''">
+                and org_name = #{orgName}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="parentId != null">
+                and parent_id = #{parentId}
+            </if>
+            <if test="orgFullName != null and orgFullName != ''">
+                and org_full_name = #{orgFullName}
+            </if>
+            <if test="orderNum != null">
+                and order_num = #{orderNum}
+            </if>
+            <if test="orgCode != null and orgCode != ''">
+                and org_code = #{orgCode}
+            </if>
+            <if test="orgType != null and orgType != ''">
+                and org_type = #{orgType}
+            </if>
+            <if test="orgDistrictId != null">
+                and org_district_id = #{orgDistrictId}
+            </if>
+            <if test="orgLongitude != null and orgLongitude != ''">
+                and org_longitude = #{orgLongitude}
+            </if>
+            <if test="orgLatitude != null and orgLatitude != ''">
+                and org_latitude = #{orgLatitude}
+            </if>
+            <if test="orgAddress != null and orgAddress != ''">
+                and org_address = #{orgAddress}
+            </if>
+            <if test="orgTele != null and orgTele != ''">
+                and org_tele = #{orgTele}
+            </if>
+            <if test="officalUserId != null">
+                and offical_user_id = #{officalUserId}
+            </if>
+            <if test="officalUserName != null and officalUserName != ''">
+                and offical_user_name = #{officalUserName}
+            </if>
+            <if test="orgComments != null">
+                and org_comments = #{orgComments}
+            </if>
+            <if test="orgStatus != null">
+                and org_status = #{orgStatus}
+            </if>
+            <if test="isDel != null">
+                and is_del = #{isDel}
+            </if>
+            <if test="storehouseVolume != null and storehouseVolume != ''">
+                and storehouse_volume = #{storehouseVolume}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into yd_tobacco_dev.yd_organization(org_name, create_time, update_time, parent_id, org_full_name, order_num, org_code, org_type, org_district_id, org_longitude, org_latitude, org_address, org_tele, offical_user_id, offical_user_name, org_comments, org_status, is_del, storehouse_volume)
+        values (#{orgName}, #{createTime}, #{updateTime}, #{parentId}, #{orgFullName}, #{orderNum}, #{orgCode}, #{orgType}, #{orgDistrictId}, #{orgLongitude}, #{orgLatitude}, #{orgAddress}, #{orgTele}, #{officalUserId}, #{officalUserName}, #{orgComments}, #{orgStatus}, #{isDel}, #{storehouseVolume})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update yd_tobacco_dev.yd_organization
+        <set>
+            <if test="orgName != null and orgName != ''">
+                org_name = #{orgName},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="parentId != null">
+                parent_id = #{parentId},
+            </if>
+            <if test="orgFullName != null and orgFullName != ''">
+                org_full_name = #{orgFullName},
+            </if>
+            <if test="orderNum != null">
+                order_num = #{orderNum},
+            </if>
+            <if test="orgCode != null and orgCode != ''">
+                org_code = #{orgCode},
+            </if>
+            <if test="orgType != null and orgType != ''">
+                org_type = #{orgType},
+            </if>
+            <if test="orgDistrictId != null">
+                org_district_id = #{orgDistrictId},
+            </if>
+            <if test="orgLongitude != null and orgLongitude != ''">
+                org_longitude = #{orgLongitude},
+            </if>
+            <if test="orgLatitude != null and orgLatitude != ''">
+                org_latitude = #{orgLatitude},
+            </if>
+            <if test="orgAddress != null and orgAddress != ''">
+                org_address = #{orgAddress},
+            </if>
+            <if test="orgTele != null and orgTele != ''">
+                org_tele = #{orgTele},
+            </if>
+            <if test="officalUserId != null">
+                offical_user_id = #{officalUserId},
+            </if>
+            <if test="officalUserName != null and officalUserName != ''">
+                offical_user_name = #{officalUserName},
+            </if>
+            <if test="orgComments != null">
+                org_comments = #{orgComments},
+            </if>
+            <if test="orgStatus != null">
+                org_status = #{orgStatus},
+            </if>
+            <if test="isDel != null">
+                is_del = #{isDel},
+            </if>
+            <if test="storehouseVolume != null and storehouseVolume != ''">
+                storehouse_volume = #{storehouseVolume},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from yd_tobacco_dev.yd_organization where id = #{id}
+    </delete>
+
+
+    <select id="listByIds" resultMap="YdOrganizationMap">
+        SELECT * FROM yd_organization
+        WHERE is_del=0 and id IN
+        <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+
+    <resultMap id="orgResultMap" type="com.yiding.saas.ydsaas.vo.OrganizationVo">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="orgName" column="org_name" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="parentId" column="parent_id" jdbcType="BIGINT"/>
+        <result property="orgFullName" column="org_full_name" jdbcType="VARCHAR"/>
+        <result property="orgCode" column="org_code" jdbcType="VARCHAR"/>
+        <result property="orgType" column="org_type" jdbcType="VARCHAR"/>
+        <result property="orgStatus" column="org_status" jdbcType="INTEGER"/>
+        <result property="orgTypeName" column="org_type_name"></result>
+        <result property="orgStatusName" column="org_status_name"></result>
+    </resultMap>
+    <select id="getOrgList" resultMap="orgResultMap">
+        SELECT
+        org.id,org.org_code,org.org_name,org.org_full_name,org.update_time,org.parent_id,org.org_type,org.org_status,
+        org_dic.label AS org_type_name,	org_stat.label as org_status_name
+        FROM	yd_organization AS org LEFT JOIN (SELECT *	FROM	sys_dict	WHERE	type = "org_type") AS org_dic ON org.org_type = org_dic.VALUE
+        LEFT JOIN (SELECT	*	FROM	sys_dict	WHERE	type = "org_status") AS org_stat ON org.org_status = org_stat.VALUE
+        where org.is_del=0
+        <if test="id != null">
+            and id = #{id}
+        </if>
+        <if test="orgName != null and orgName != ''">
+            and org_name = #{orgName}
+        </if>
+        <if test="createTime != null">
+            and create_time = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            and update_time = #{updateTime}
+        </if>
+        <if test="parentId != null">
+            and parent_id = #{parentId}
+        </if>
+        <if test="orgFullName != null and orgFullName != ''">
+            and org_full_name = #{orgFullName}
+        </if>
+        <if test="orderNum != null">
+            and order_num = #{orderNum}
+        </if>
+        <if test="orgCode != null and orgCode != ''">
+            and org_code = #{orgCode}
+        </if>
+        <if test="orgType != null and orgType != ''">
+            and org_type = #{orgType}
+        </if>
+        <if test="orgDistrictId != null">
+            and org_district_id = #{orgDistrictId}
+        </if>
+        <if test="orgLongitude != null and orgLongitude != ''">
+            and org_longitude = #{orgLongitude}
+        </if>
+        <if test="orgLatitude != null and orgLatitude != ''">
+            and org_latitude = #{orgLatitude}
+        </if>
+        <if test="orgAddress != null and orgAddress != ''">
+            and org_address = #{orgAddress}
+        </if>
+        <if test="orgTele != null and orgTele != ''">
+            and org_tele = #{orgTele}
+        </if>
+        <if test="officalUserId != null">
+            and offical_user_id = #{officalUserId}
+        </if>
+        <if test="officalUserName != null and officalUserName != ''">
+            and offical_user_name = #{officalUserName}
+        </if>
+        <if test="orgComments != null">
+            and org_comments = #{orgComments}
+        </if>
+        <if test="orgStatus != null">
+            and org_status = #{orgStatus}
+        </if>
+    </select>
+
+    <update id="batchUpdateStoreHouse">
+        UPDATE yd_organization
+        SET org_name = CASE id
+          <foreach collection="ydOrganizations" item="org">
+              WHEN #{org.id} THEN #{org.orgName}
+          </foreach>
+              END,
+        storehouse_volume = CASE id
+        <foreach collection="ydOrganizations" item="org">
+              WHEN #{org.id} THEN  #{org.storehouseVolume}
+        </foreach>
+              END,
+          update_time=NOW()
+          WHERE
+	    id IN (
+        <foreach collection="ydOrganizations" item="org" index="index" separator=",">
+            #{org.id}
+        </foreach>
+        )
+    </update>
+
+    <insert id="batchInsertStoreHouse">
+        INSERT INTO `yd_organization` (`org_name`, `create_time`, `parent_id`,`org_type`,  `org_status`, `is_del`, `storehouse_volume`) VALUES
+        <foreach collection="ydOrganizations" item="org" separator=",">
+            (#{org.orgName}, now(),#{org.parentId}, '4', '1', '0', #{org.storehouseVolume})
+        </foreach>
+    </insert>
+
+    <select id="getOrgListByOrgType" resultMap="YdOrganizationMap">
+        select * from yd_organization where is_del=0 and org_status=1 and
+        org_type in (
+        <foreach collection="orgTypes" item="orgType" separator=",">
+            #{orgType}
+        </foreach>
+        )
+    </select>
+
+</mapper>

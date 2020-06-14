@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiding.saas.ydsaas.dao.YdWarnMapper">
+
+    <resultMap type="com.yiding.saas.ydsaas.model.YdWarn" id="YdWarnMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="warnType" column="warn_type" jdbcType="VARCHAR"/>
+        <result property="transportId" column="transport_id" jdbcType="INTEGER"/>
+        <result property="carLongitude" column="car_longitude" jdbcType="VARCHAR"/>
+        <result property="carLatitude" column="car_latitude" jdbcType="VARCHAR"/>
+        <result property="warnContent" column="warn_content" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="processState" column="process_state" jdbcType="INTEGER"/>
+        <result property="processUserId" column="process_user_id" jdbcType="INTEGER"/>
+        <result property="processUserName" column="process_user_name" jdbcType="VARCHAR"/>
+        <result property="processContent" column="process_content" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="YdWarnMap">
+        select
+          id, warn_type, transport_id, car_longitude, car_latitude, warn_content, create_time, update_time, process_state, process_user_id, process_user_name, process_content
+        from yd_tobacco_dev.yd_warn
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="YdWarnMap">
+        select
+          id, warn_type, transport_id, car_longitude, car_latitude, warn_content, create_time, update_time, process_state, process_user_id, process_user_name, process_content
+        from yd_tobacco_dev.yd_warn
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="YdWarnMap">
+        select
+        id, warn_type, transport_id, car_longitude, car_latitude, warn_content, create_time, update_time, process_state,
+        process_user_id, process_user_name, process_content
+        from yd_tobacco_dev.yd_warn
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="warnType != null and warnType != ''">
+                and warn_type = #{warnType}
+            </if>
+            <if test="transportId != null">
+                and transport_id = #{transportId}
+            </if>
+            <if test="carLongitude != null and carLongitude != ''">
+                and car_longitude = #{carLongitude}
+            </if>
+            <if test="carLatitude != null and carLatitude != ''">
+                and car_latitude = #{carLatitude}
+            </if>
+            <if test="warnContent != null and warnContent != ''">
+                and warn_content = #{warnContent}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="processState != null">
+                and process_state = #{processState}
+            </if>
+            <if test="processUserId != null">
+                and process_user_id = #{processUserId}
+            </if>
+            <if test="processUserName != null and processUserName != ''">
+                and process_user_name = #{processUserName}
+            </if>
+            <if test="processContent != null and processContent != ''">
+                and process_content = #{processContent}
+            </if>
+        </where>
+        order by create_time desc
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into yd_tobacco_dev.yd_warn(warn_type, transport_id, car_longitude, car_latitude, warn_content, create_time, update_time, process_state, process_user_id, process_user_name, process_content)
+        values (#{warnType}, #{transportId}, #{carLongitude}, #{carLatitude}, #{warnContent}, #{createTime}, #{updateTime}, #{processState}, #{processUserId}, #{processUserName}, #{processContent})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update yd_tobacco_dev.yd_warn
+        <set>
+            <if test="warnType != null and warnType != ''">
+                warn_type = #{warnType},
+            </if>
+            <if test="transportId != null">
+                transport_id = #{transportId},
+            </if>
+            <if test="carLongitude != null and carLongitude != ''">
+                car_longitude = #{carLongitude},
+            </if>
+            <if test="carLatitude != null and carLatitude != ''">
+                car_latitude = #{carLatitude},
+            </if>
+            <if test="warnContent != null and warnContent != ''">
+                warn_content = #{warnContent},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="processState != null">
+                process_state = #{processState},
+            </if>
+            <if test="processUserId != null">
+                process_user_id = #{processUserId},
+            </if>
+            <if test="processUserName != null and processUserName != ''">
+                process_user_name = #{processUserName},
+            </if>
+            <if test="processContent != null and processContent != ''">
+                process_content = #{processContent},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from yd_tobacco_dev.yd_warn where id = #{id}
+    </delete>
+
+
+    <resultMap id="warnVoMap" type="com.yiding.saas.ydsaas.vo.WarnVo">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="warnType" column="warn_type" jdbcType="VARCHAR"/>
+        <result property="transportId" column="transport_id" jdbcType="INTEGER"/>
+        <result property="carLongitude" column="car_longitude" jdbcType="VARCHAR"/>
+        <result property="carLatitude" column="car_latitude" jdbcType="VARCHAR"/>
+        <result property="warnContent" column="warn_content" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="processState" column="process_state" jdbcType="INTEGER"/>
+        <result property="processUserId" column="process_user_id" jdbcType="INTEGER"/>
+        <result property="processUserName" column="process_user_name" jdbcType="VARCHAR"/>
+        <result property="processContent" column="process_content" jdbcType="VARCHAR"/>
+        <result property="driverName" column="driver_name"></result>
+        <result property="driverMobile" column="driver_mobile"></result>
+        <result property="carNo" column="card_no"></result>
+        <result property="transprotNo" column="transport_no"></result>
+        <result property="processUserName" column="process_user_name" jdbcType="VARCHAR"/>
+        <result property="processContent" column="process_content" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+
+    <select id="getListByParms" resultType="com.yiding.saas.ydsaas.dto.WarnDto" resultMap="warnVoMap">
+        SELECT
+        warn.id,
+        warn_content,
+        warn_type,
+        transport_id,
+        car_latitude,
+        car_longitude,
+        process_state,
+        driver_mobile,
+        driver_name,
+        car_no,
+        warn.create_time,
+        tran.transport_no,
+        warn.process_user_name,
+        warn.process_content,
+        warn.update_time
+        FROM
+        yd_warn AS warn
+        LEFT JOIN yd_transport AS tran ON warn.transport_id = tran.id where 1=1
+        <if test="transportId!=null">
+            and warn.transport_id=#{transportId}
+        </if>
+        <if test="transportNo!=null and transportNo!=''">
+            and tran.transport_no=#{transportNo}
+        </if>
+        <if test="startTime!=null and endTime!=''">
+            and warn.create_time <![CDATA[ <= ]]> #{endTime} and warn.create_time <![CDATA[ >= ]]> #{startTime}
+        </if>
+        order by warn.create_time desc
+    </select>
+
+
+</mapper>

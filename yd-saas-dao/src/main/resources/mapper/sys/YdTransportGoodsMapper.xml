@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiding.saas.ydsaas.dao.YdTransportGoodsMapper">
+  <resultMap id="BaseResultMap" type="com.yiding.saas.ydsaas.model.YdTransportGoods">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="transport_id" jdbcType="INTEGER" property="transportId" />
+    <result column="rfid" jdbcType="VARCHAR" property="rfid" />
+    <result column="goods_state" jdbcType="INTEGER" property="goodsState" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yd_transport_goods
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yiding.saas.ydsaas.model.YdTransportGoods">
+    insert into yd_transport_goods (id, transport_id, rfid, goods_state,
+      create_time)
+    values (#{id,jdbcType=INTEGER}, #{transportId,jdbcType=INTEGER}, #{rfid,jdbcType=VARCHAR}, #{goodsState,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.yiding.saas.ydsaas.model.YdTransportGoods">
+    update yd_transport_goods
+    set transport_id = #{transportId,jdbcType=INTEGER},
+      rfid = #{rfid,jdbcType=VARCHAR},
+      goods_state = #{goodsState,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, transport_id, rfid, create_time,goods_state
+    from yd_transport_goods
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, transport_id, rfid, create_time,goods_state
+    from yd_transport_goods
+  </select>
+  
+  <!-- 运单详情-烟框列表查询 -->
+  <select id="selectGoodsList" resultType="com.yiding.saas.ydsaas.dto.YdWareHouseLogDto">
+    SELECT
+    g.transport_id AS transportId,
+	a.rfid,
+	b.tobacco_name AS tobaccoName,
+	b.tobacco_level AS tobaccoLevel,
+	a.count,
+	a.unit,
+	a.tobacco_station AS tobaccoStation
+	FROM
+		yd_transport_goods g
+	LEFT JOIN yd_basics_warehouse_log a ON g.rfid = a.rfid
+	LEFT JOIN yd_tobacco b ON a.tobacco_id = b.id
+	WHERE g.transport_id = #{transportId}
+  </select>
+</mapper>

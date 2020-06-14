@@ -1,0 +1,80 @@
+server:
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+    min-spare-threads: 30
+    max-http-post-size: 200
+
+  port: 9316
+  max-http-header-size: 102400000
+spring:
+  application:
+    name: yd-tobacco
+  datasource:
+    name: druidDataSource
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      # 测试
+      url: jdbc:mysql://39.100.80.186:3306/yd_tobacco_dev?useUnicode=true&zeroDateTimeBehavior=convertToNull&autoReconnect=true&characterEncoding=utf-8
+      username: tobacco
+      password: 8PRQih9$W3iKW971
+
+      filters: stat,wall,log4j,config
+      max-active: 100
+      initial-size: 1
+      max-wait: 60000
+      min-idle: 1
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: select 1
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-open-prepared-statements: 50
+      max-pool-prepared-statement-per-connection-size: 20
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+  jackson:
+    time-zone: GMT+8
+
+
+saasconfig:
+  fileSeparator: /home/imgSev/img/
+  ipAddr: 47.104.186.201
+  port: 21
+  uname: saasftp
+  passWord: 123456
+#habsePath: http://127.0.0.1:8998
+habsePath: http://47.104.186.201:8998
+
+filePath: http://47.104.186.201:10008/img/
+
+#token 失效时间
+login:
+  jwt:
+    time: 18000000
+
+#log config
+logging:
+  path: /home/logs/${spring.application.name}
+  file:
+    max-history: 30
+    max-size: 30MB
+  level:
+    com.yiding.saas.ydsaas.dao: debug
+    
+#Jiguang push platform
+apnsProduction: false
+
+#iot
+
+iot:
+  start:
+    loding: http://47.92.212.251:9922/business/startLoading
+  ending:
+    loading: http://47.92.212.251:9922/business/endLoading
+  startDeparture: http://47.92.212.251:9922/business/startDeparture

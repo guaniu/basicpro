@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiding.saas.ydsaas.dao.YdDistrictMapper">
+
+    <resultMap type="com.yiding.saas.ydsaas.model.YdDistrict" id="YdDistrictMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="districtName" column="district_name" jdbcType="VARCHAR"/>
+        <result property="districtCode" column="district_code" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="parentId" column="parent_id" jdbcType="INTEGER"/>
+        <result property="districtLevel" column="district_level" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="YdDistrictMap">
+        select
+          id, district_name, district_code, create_time, update_time, parent_id, district_level
+        from yd_tobacco_dev.yd_district
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="YdDistrictMap">
+        select
+          id, district_name, district_code, create_time, update_time, parent_id, district_level
+        from yd_tobacco_dev.yd_district
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="YdDistrictMap">
+        select
+          id, district_name, district_code, create_time, update_time, parent_id, district_level
+        from yd_tobacco_dev.yd_district
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="districtName != null and districtName != ''">
+                and district_name = #{districtName}
+            </if>
+            <if test="districtCode != null and districtCode != ''">
+                and district_code = #{districtCode}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="parentId != null">
+                and parent_id = #{parentId}
+            </if>
+            <if test="districtLevel != null and districtLevel != ''">
+                and district_level = #{districtLevel}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into yd_tobacco_dev.yd_district(district_name, district_code, create_time, update_time, parent_id, district_level)
+        values (#{districtName}, #{districtCode}, #{createTime}, #{updateTime}, #{parentId}, #{districtLevel})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update yd_tobacco_dev.yd_district
+        <set>
+            <if test="districtName != null and districtName != ''">
+                district_name = #{districtName},
+            </if>
+            <if test="districtCode != null and districtCode != ''">
+                district_code = #{districtCode},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="parentId != null">
+                parent_id = #{parentId},
+            </if>
+            <if test="districtLevel != null and districtLevel != ''">
+                district_level = #{districtLevel},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from yd_tobacco_dev.yd_district where id = #{id}
+    </delete>
+
+</mapper>

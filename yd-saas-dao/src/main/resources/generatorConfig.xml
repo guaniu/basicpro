@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <context id="DB2Tables" targetRuntime="MyBatis3"
+             defaultModelType="flat">
+        <property name="javaFileEncoding" value="UTF-8"/>
+        <!-- MySQL分页插件 -->
+        <plugin type="com.itfsw.mybatis.generator.plugins.LimitPlugin"/>
+        <plugin type="com.itfsw.mybatis.generator.plugins.ModelBuilderPlugin"/>
+        <plugin type="com.itfsw.mybatis.generator.plugins.SelectOneByExamplePlugin"/>
+        <!-- 数据Model属性对应Column获取插件 -->
+        <plugin type="com.itfsw.mybatis.generator.plugins.ModelColumnPlugin"/>
+        <plugin type="com.itfsw.mybatis.generator.plugins.SelectSelectivePlugin"/>
+        <!-- 批量插入插件 -->
+        <plugin type="com.itfsw.mybatis.generator.plugins.BatchInsertPlugin"/>
+        <!-- 存在即更新插件 -->
+        <plugin type="com.itfsw.mybatis.generator.plugins.UpsertPlugin"/>
+
+        <commentGenerator>
+            <property name="addRemarkComments" value="true"/>
+            <property name="dateFormat" value="yyyy-MM-dd HH:mm:ss"/>
+        </commentGenerator>
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://192.168.0.101:3306/saas_manage?useUnicode=true&amp;characterEncoding=utf-8"
+                        userId="iot" password="11ez82ka">
+        </jdbcConnection>
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="com.yiding.saas.ydsaas.dao.domain"
+                            targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaModelGenerator>
+
+        <sqlMapGenerator targetPackage="mapper/generator"
+                         targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <javaClientGenerator type="XMLMAPPER"
+                             targetPackage="com.yiding.saas.ydsaas.dao.business" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+      <!-- <table tableName="yt_basics_enterprise" domainObjectName="YtBasicsEnterpriseDO" mapperName="YtBasicsEnterpriseMapper"
+               enableInsert="true" enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true" enableCountByExample="true"
+               enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true"
+               selectByExampleQueryId="true">
+           <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+
+        <table tableName="yt_basics_area" domainObjectName="YtBasicsAreaDO" mapperName="YtBasicsAreaMapper"
+               enableInsert="true" enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true" enableCountByExample="true"
+               enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true"
+               selectByExampleQueryId="true">
+            <generatedKey column="ID" sqlStatement="MySql" identity="true"/>
+        </table>
+
+        <table tableName="yt_basics_farm" domainObjectName="YtBasicsFarmDO" mapperName="YtBasicsFarmMapper"
+               enableInsert="true" enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true" enableCountByExample="true"
+               enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true"
+               selectByExampleQueryId="true">
+            <generatedKey column="ID" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="yt_basics_oxer" domainObjectName="YtBasicsOxerDO" mapperName="YtBasicsOxerMapper"
+               enableInsert="true" enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true" enableCountByExample="true"
+               enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true"
+               selectByExampleQueryId="true">
+            <generatedKey column="ID" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="yt_basics_supplier" domainObjectName="YtBasicsSupplierDO" mapperName="YtBasicsSupplierMapper"
+               enableInsert="true" enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true" enableCountByExample="true"
+               enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true"
+               selectByExampleQueryId="true">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="yt_basics_warehouse" domainObjectName="YtBasicsWarehouseDO" mapperName="YtBasicsWarehouseMapper"
+               enableInsert="true" enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true" enableCountByExample="true"
+               enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true"
+               selectByExampleQueryId="true">
+            <generatedKey column="ID" sqlStatement="MySql" identity="true"/>
+        </table>
+        <table tableName="yt_customers_info" domainObjectName="YtCustomersInfoDO" mapperName="YtCustomersInfoMapper"
+               enableInsert="true" enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true" enableCountByExample="true"
+               enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true"
+               selectByExampleQueryId="true">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>-->
+
+        <!--<table tableName="sys_user" domainObjectName="SysUserDO" mapperName="YDSysUserMapper"-->
+               <!--enableInsert="true" enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="true"-->
+               <!--enableDeleteByPrimaryKey="true" enableCountByExample="true"-->
+               <!--enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true"-->
+               <!--selectByExampleQueryId="true">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="sys_dept" domainObjectName="SysDeptDO" mapperName="YDSysDeptMapper"-->
+               <!--enableInsert="true" enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="true"-->
+               <!--enableDeleteByPrimaryKey="true" enableCountByExample="true"-->
+               <!--enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true"-->
+               <!--selectByExampleQueryId="true">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="sys_user_data_scope" domainObjectName="SysUserDataScopeDO" mapperName="SysUserDataScopeMapper"-->
+        <!--enableInsert="true" enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="true"-->
+        <!--enableDeleteByPrimaryKey="true" enableCountByExample="true"-->
+        <!--enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true"-->
+        <!--selectByExampleQueryId="true">-->
+        <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+        <!--<table tableName="yt_basics_enterprise" domainObjectName="YtBasicsEnterpriseDO" mapperName="YtBasicsEnterpriseMapper"-->
+               <!--enableInsert="true" enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="true"-->
+               <!--enableDeleteByPrimaryKey="true" enableCountByExample="true"-->
+               <!--enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true"-->
+               <!--selectByExampleQueryId="true">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="yt_basics_area" domainObjectName="YtBasicsAreaDO" mapperName="YtBasicsAreaMapper"-->
+               <!--enableInsert="true" enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="true"-->
+               <!--enableDeleteByPrimaryKey="true" enableCountByExample="true"-->
+               <!--enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true"-->
+               <!--selectByExampleQueryId="true">-->
+            <!--<generatedKey column="ID" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+
+        <!--<table tableName="yt_basics_farm" domainObjectName="YtBasicsFarmDO" mapperName="YtBasicsFarmMapper"-->
+               <!--enableInsert="true" enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="true"-->
+               <!--enableDeleteByPrimaryKey="true" enableCountByExample="true"-->
+               <!--enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true"-->
+               <!--selectByExampleQueryId="true">-->
+            <!--<generatedKey column="ID" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+        <!--<table tableName="yt_basics_oxer" domainObjectName="YtBasicsOxerDO" mapperName="YtBasicsOxerMapper"-->
+               <!--enableInsert="true" enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="true"-->
+               <!--enableDeleteByPrimaryKey="true" enableCountByExample="true"-->
+               <!--enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true"-->
+               <!--selectByExampleQueryId="true">-->
+            <!--<generatedKey column="ID" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+        <!--<table tableName="yt_basics_supplier" domainObjectName="YtBasicsSupplierDO" mapperName="YtBasicsSupplierMapper"-->
+               <!--enableInsert="true" enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="true"-->
+               <!--enableDeleteByPrimaryKey="true" enableCountByExample="true"-->
+               <!--enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true"-->
+               <!--selectByExampleQueryId="true">-->
+            <!--<generatedKey column="id" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+        <!--<table tableName="yt_basics_warehouse" domainObjectName="YtBasicsWarehouseDO" mapperName="YtBasicsWarehouseMapper"-->
+               <!--enableInsert="true" enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="true"-->
+               <!--enableDeleteByPrimaryKey="true" enableCountByExample="true"-->
+               <!--enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true"-->
+               <!--selectByExampleQueryId="true">-->
+            <!--<generatedKey column="ID" sqlStatement="MySql" identity="true"/>-->
+        <!--</table>-->
+        <table tableName="yt_basics_enterprise" domainObjectName="YtBasicsEnterpriseDO" mapperName="YtBasicsEnterpriseMapper"
+               enableInsert="true" enableUpdateByPrimaryKey="true" enableSelectByPrimaryKey="true"
+               enableDeleteByPrimaryKey="true" enableCountByExample="true"
+               enableUpdateByExample="true" enableDeleteByExample="true" enableSelectByExample="true"
+               selectByExampleQueryId="true">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+        <!--<table tableName="yt_electric_fence" domainObjectName="YtElectricFenceDO">-->
+            <!--<columnOverride column="points" jdbcType="VARCHAR" />-->
+        <!--</table>-->
+    </context>
+</generatorConfiguration>

@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiding.saas.ydsaas.dao.YdTransportMapper">
+  <resultMap id="BaseResultMap" type="com.yiding.saas.ydsaas.model.YdTransport">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="org_id" jdbcType="INTEGER" property="orgId" />
+    <result column="send_id" jdbcType="INTEGER" property="sendId" />
+    <result column="send_name" jdbcType="VARCHAR" property="sendName" />
+    <result column="receive_id" jdbcType="INTEGER" property="receiveId" />
+    <result column="receive_name" jdbcType="VARCHAR" property="receiveName" />
+    <result column="device_no" jdbcType="VARCHAR" property="deviceNo" />
+    <result column="car_no" jdbcType="VARCHAR" property="carNo" />
+    <result column="dispatch_no" jdbcType="VARCHAR" property="dispatchNo" />
+    <result column="transport_no" jdbcType="VARCHAR" property="transportNo" />
+    <result column="estime" jdbcType="INTEGER" property="estime" />
+    <result column="driver_name" jdbcType="VARCHAR" property="driverName" />
+    <result column="driver_mobile" jdbcType="VARCHAR" property="driverMobile" />
+    <result column="transport_state" jdbcType="INTEGER" property="transportState" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="depart_time" jdbcType="TIMESTAMP" property="departTime" />
+    <result column="arrive_time" jdbcType="TIMESTAMP" property="arriveTime" />
+    <result column="finsh_time" jdbcType="TIMESTAMP" property="finshTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="remarks" jdbcType="VARCHAR" property="remarks" />
+    <result column="loader_id" jdbcType="INTEGER" property="loaderId" />
+    <result column="weight" jdbcType="VARCHAR" property="weight" />
+    <result column="goods_type" jdbcType="VARCHAR" property="goodsType" />
+    <result column="goods_num" jdbcType="INTEGER" property="goodsNum" />
+    <result column="parent_ids" jdbcType="VARCHAR" property="parentIds" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    update yd_transport set status = 1
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yiding.saas.ydsaas.model.YdTransport">
+    insert into yd_transport (id, org_id, send_id,
+      send_name, receive_id, receive_name,
+      device_no, car_no, dispatch_no,
+      transport_no, estime, driver_name,
+      driver_mobile, transport_state,
+      create_time, depart_time, arrive_time,
+      finsh_time, update_time, status,
+      remarks,parent_ids)
+    values (#{id,jdbcType=INTEGER}, #{orgId,jdbcType=INTEGER}, #{sendId,jdbcType=INTEGER},
+      #{sendName,jdbcType=VARCHAR}, #{receiveId,jdbcType=INTEGER}, #{receiveName,jdbcType=VARCHAR},
+      #{deviceNo,jdbcType=VARCHAR}, #{carNo,jdbcType=VARCHAR}, #{dispatchNo,jdbcType=VARCHAR},
+      #{transportNo,jdbcType=VARCHAR}, #{estime,jdbcType=INTEGER}, #{driverName,jdbcType=VARCHAR},
+      #{driverMobile,jdbcType=VARCHAR}, #{transportState,jdbcType=INTEGER},
+      #{createTime,jdbcType=TIMESTAMP}, #{departTime,jdbcType=TIMESTAMP}, #{arriveTime,jdbcType=TIMESTAMP},
+      #{finshTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=INTEGER},
+      #{remarks,jdbcType=VARCHAR},#{parentIds,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.yiding.saas.ydsaas.model.YdTransport">
+    update yd_transport
+    set org_id = #{orgId,jdbcType=INTEGER},
+      send_id = #{sendId,jdbcType=INTEGER},
+      send_name = #{sendName,jdbcType=VARCHAR},
+      receive_id = #{receiveId,jdbcType=INTEGER},
+      receive_name = #{receiveName,jdbcType=VARCHAR},
+      device_no = #{deviceNo,jdbcType=VARCHAR},
+      car_no = #{carNo,jdbcType=VARCHAR},
+      dispatch_no = #{dispatchNo,jdbcType=VARCHAR},
+      transport_no = #{transportNo,jdbcType=VARCHAR},
+      estime = #{estime,jdbcType=INTEGER},
+      driver_name = #{driverName,jdbcType=VARCHAR},
+      driver_mobile = #{driverMobile,jdbcType=VARCHAR},
+      transport_state = #{transportState,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      depart_time = #{departTime,jdbcType=TIMESTAMP},
+      arrive_time = #{arriveTime,jdbcType=TIMESTAMP},
+      finsh_time = #{finshTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      status = #{status,jdbcType=INTEGER},
+      remarks = #{remarks,jdbcType=VARCHAR},
+      loader_id = #{loaderId,jdbcType=INTEGER},
+      weight = #{weight,jdbcType=VARCHAR},
+      goods_type = #{goodsType,jdbcType=VARCHAR},
+      goods_num = #{goodsNum,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, org_id, send_id, send_name, receive_id, receive_name, device_no, car_no, 
+    dispatch_no, transport_no, estime, driver_name, driver_mobile, transport_state,
+    create_time, depart_time, arrive_time, finsh_time, update_time, status, remarks,loader_id,weight,
+    goods_type,goods_num,parent_ids
+    from yd_transport
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, org_id, send_id, send_name, receive_id, receive_name, device_no, car_no, 
+    dispatch_no, transport_no, estime, driver_name, driver_mobile, transport_state,
+    create_time, depart_time, arrive_time, finsh_time, update_time, status, remarks, loader_id,weight,
+    goods_type,goods_num,parent_ids
+    from yd_transport
+    <where>
+       1=1
+       <choose>
+             <when test="transportState!=null and transportState==10">
+                and (transport_state = 1 or transport_state = 2)
+             </when>
+             <when  test="transportState!=null and transportState==20">
+                 and transport_state = 3
+             </when>
+             <when test="transportState!=null and transportState==30">
+                and (transport_state = 4 or transport_state = 5)
+             </when>
+        </choose>
+       <if test="parentIds!=null and parentIds!=''">
+         and parent_ids like '%${parentIds}%'
+       </if>
+       <if test="appArgsNo!=null and appArgsNo!=''">
+         and (transport_no like '%${appArgsNo}%' or car_no like '%${appArgsNo}%' or dispatch_no like '%${appArgsNo}%')
+       </if>
+       <!-- PC端查询条件 -->
+       <if test="transportNo!=null and transportNo!=''">
+         and transport_no like '%${transportNo}%'
+       </if>
+       <if test="dispatchNo!=null and dispatchNo!=''">
+         and dispatch_no like '%${dispatchNo}%'
+       </if>
+       <if test="carNo!=null and carNo!=''">
+         and car_no like '%${carNo}%'
+       </if>
+       <if test="deviceNo!=null and deviceNo!=''">
+         and device_no like '%${deviceNo}%'
+       </if>
+       <if test="sendId!=null and sendId!=''">
+         and send_id = #{sendId}
+       </if>
+       <if test="receiveId!=null and receiveId!=''">
+         and receive_id = #{receiveId}
+       </if>
+       <!-- 
+       <if test="goodState!=null and goodState!=''">
+         and good_state = #{goodState}
+       </if>
+        -->
+       <if test="itemBt!=null and itemBt!=''">
+	       <choose>
+	         <when test="item!=null and item==1">
+	           and create_time <![CDATA[ >= ]]> #{itemBt}
+	         </when>
+	         <when test="item!=null and item==2">
+	           and finsh_time <![CDATA[ >= ]]> #{itemBt}
+	         </when>
+	         <when test="item!=null and item==3">
+	           and arrive_time <![CDATA[ >= ]]> #{itemBt}
+	         </when>
+	       </choose>
+       </if>
+       <if test="itemEt!=null and itemEt!=''">
+	       <choose>
+	         <when test="item!=null and item==1">
+	           and create_time <![CDATA[ <= ]]> #{itemEt}
+	         </when>
+	         <when test="item!=null and item==2">
+	           and finsh_time <![CDATA[ <= ]]> #{itemEt}
+	         </when>
+	         <when test="item!=null and item==3">
+	           and arrive_time <![CDATA[ <= ]]> #{itemEt}
+	         </when>
+	       </choose>
+       </if>
+       <if test="createTimeNow!=null and createTimeNow==1">
+            and TO_DAYS(create_time) = TO_DAYS(NOW()) 
+        </if>
+        <if test="orgStrIds!=null and orgStrIds.size()>0">
+            and ( 1!=1 or
+            <foreach collection="orgStrIds" item="orgId" index="index" separator="or">
+                parent_ids like '%${orgId}%'
+            </foreach
+            >
+            )
+        </if>
+    </where>
+       order by create_time desc
+  </select>
+  
+  <select id="selectStat" parameterType="string" resultType="int">
+    select count(1) from yd_transport where transport_state = 2 and parent_ids like '%${parentIds}%'
+	union all
+	select count(1) from yd_transport where transport_state = 3 and parent_ids like '%${parentIds}%'
+	union all
+	select count(1) from yd_transport where transport_state = 4 and parent_ids like '%${parentIds}%'
+	union all
+	select count(1) from yd_transport where transport_state = 5 and parent_ids like '%${parentIds}%'
+	union all
+	select count(1) from yd_transport where `status` = 1  and parent_ids like '%${parentIds}%'
+  </select>
+  
+  
+  <select id="selectStatByOrgIds"  resultType="int">
+    select count(1) from yd_transport where status=0
+    <if test="createTime!=null">
+        and date_format(create_time,'%Y-%m-%d')=#{createTime}
+    </if>
+    <if test="travelState!=null">
+        and transport_state=#{travelState}
+    </if>
+    <if test="orgIds!=null and orgIds.size()>0">
+        and ( 1!=1 or
+        <foreach collection="orgIds" item="orgId" index="index" separator="or">
+            parent_ids like '%${orgId}%'
+        </foreach
+        >
+            )
+    </if>
+  </select>
+
+
+    <resultMap id="tarnTobaccoMap" type="com.yiding.saas.ydsaas.vo.TransportTobaccoVo">
+        <result property="transportNo" column="transport_no"></result>
+        <result property="rfidId" column="rfid_id"></result>
+        <result property="tobaccoName" column="tobacco_name"></result>
+        <result property="tobaccoLevel" column="tobacco_level"></result>
+        <result property="tobaccoStation" column="tobacco_station"></result>
+        <result property="weight" column="weight"></result>
+        <result property="packageType" column="package_type"></result>
+        <result property="packageDate" column="package_date"></result>
+        <result property="transportState" column="transport_state"></result>
+        <result property="remarks" column="remarks"></result>
+    </resultMap>
+
+    <select id="getTobaccoList" resultMap="tarnTobaccoMap">
+        SELECT
+	tran.transport_no,
+	tran_goods.rfid_id,
+	tobacco.tobacco_name,
+	tobacco.tobacco_level,
+	warehouse_log.tobacco_station,
+	warehouse_log.weight,
+	warehouse_log.package_type,
+	warehouse_log.package_date,
+	tran.transport_state,
+	tran.remarks
+    FROM
+    	yd_transport AS tran
+    LEFT JOIN yd_transport_goods AS tran_goods ON tran.id = tran_goods.transport_id
+    LEFT JOIN yd_basics_warehouse_log AS warehouse_log ON tran_goods.rfid_id = warehouse_log.rfid
+    LEFT JOIN yd_tobacco AS tobacco ON warehouse_log.tobacco_id = tobacco.id
+    WHERE
+    	tran_goods.rfid_id = warehouse_log.rfid
+    AND tran.id = #{id}
+    <if test="rfid!=null">
+        AND tran_goods.rfid_id=#{rfid}
+    </if>
+    <if test="travelState!=null">
+        and tran.transport_state=#{travelState}
+    </if>
+    <if test="orgIds!=null and orgIds.size()>0">
+        and ( 1!=1 or
+        <foreach collection="orgIds" item="orgId" index="index" separator="or">
+            tran.parent_ids like '%${orgId}%'
+        </foreach
+        >
+            )
+    </if>
+    </select>
+
+
+    <select id="sumTobaccoList" resultMap="tarnTobaccoMap">
+    SELECT
+	tobacco.tobacco_level,
+    SUM(warehouse_log.weight) as weight
+    FROM
+    	yd_transport AS tran
+    LEFT JOIN yd_transport_goods AS tran_goods ON tran.id = tran_goods.transport_id
+    LEFT JOIN yd_basics_warehouse_log AS warehouse_log ON tran_goods.rfid = warehouse_log.rfid
+    LEFT JOIN yd_tobacco AS tobacco ON warehouse_log.tobacco_id = tobacco.id
+    WHERE tran_goods.rfid = warehouse_log.rfid  AND tran.id = #{id}
+        <if test="rfid!=null">
+            AND tran_goods.rfid_id=#{rfid}
+        </if>
+        <if test="travelState!=null">
+            and tran.transport_state=#{travelState}
+        </if>
+        <if test="orgIds!=null and orgIds.size()>0">
+            and ( 1!=1 or
+            <foreach collection="orgIds" item="orgId" index="index" separator="or">
+                tran.parent_ids like '%${orgId}%'
+            </foreach
+            >
+            )
+        </if>
+    GROUP BY tobacco_level
+    </select>
+</mapper>

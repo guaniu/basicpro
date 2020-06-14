@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiding.saas.ydsaas.dao.YdInformationMapper">
+  <resultMap id="BaseResultMap" type="com.yiding.saas.ydsaas.model.YdInformation">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="transport_id" jdbcType="INTEGER" property="transportId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="type" jdbcType="INTEGER" property="type" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="is_read" jdbcType="INTEGER" property="isRead" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="parent_ids" jdbcType="VARCHAR" property="parentIds" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, transport_id, user_id, type, content, create_time, is_read, status, parent_ids
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yd_information
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yd_information
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yiding.saas.ydsaas.model.YdInformation">
+    insert into yd_information (id, transport_id, user_id, 
+      type, content, create_time, 
+      is_read, status, parent_ids
+      )
+    values (#{id,jdbcType=INTEGER}, #{transportId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
+      #{type,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{isRead,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, #{parentIds,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yiding.saas.ydsaas.model.YdInformation">
+    insert into yd_information
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="transportId != null">
+        transport_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="isRead != null">
+        is_read,
+      </if>
+      <if test="status != null">
+        status,
+      </if>
+      <if test="parentIds != null">
+        parent_ids,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="transportId != null">
+        #{transportId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isRead != null">
+        #{isRead,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="parentIds != null">
+        #{parentIds,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yiding.saas.ydsaas.model.YdInformation">
+    update yd_information
+    <set>
+      <if test="transportId != null">
+        transport_id = #{transportId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isRead != null">
+        is_read = #{isRead,jdbcType=INTEGER},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="parentIds != null">
+        parent_ids = #{parentIds,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yiding.saas.ydsaas.model.YdInformation">
+    update yd_information
+    set transport_id = #{transportId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      type = #{type,jdbcType=INTEGER},
+      content = #{content,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      is_read = #{isRead,jdbcType=INTEGER},
+      status = #{status,jdbcType=INTEGER},
+      parent_ids = #{parentIds,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectAll" resultMap="BaseResultMap">
+  	select id, transport_id, type, content, create_time, is_read, status, parent_ids, user_id from yd_information
+  <where>
+     `status` = 0
+     <!-- 
+	 <if test="orgStrIds!=null and orgStrIds.size()>0">
+          and ( 1!=1 or
+          <foreach collection="orgStrIds" item="orgId" index="index" separator="or">
+              parent_ids like '%${orgId}%'
+          </foreach>
+          )
+      </if>
+       -->
+      <if test="userId!=null and userId>0">
+        and user_id = #{userId}
+      </if>
+  </where>
+  	order by create_time desc
+  </select>
+</mapper>

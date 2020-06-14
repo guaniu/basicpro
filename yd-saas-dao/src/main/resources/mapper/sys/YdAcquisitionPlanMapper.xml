@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiding.saas.ydsaas.dao.YdAcquisitionPlanMapper">
+
+
+    <resultMap type="com.yiding.saas.ydsaas.model.YdAcquisitionPlan" id="YdAcquisitionPlanMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="storehouseId" column="storehouse_id" jdbcType="INTEGER"/>
+        <result property="storehouseName" column="storehouse_name" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="startTime" column="start_time" jdbcType="TIMESTAMP"/>
+        <result property="stopTime" column="stop_time" jdbcType="TIMESTAMP"/>
+        <result property="acquisitionWeight" column="acquisition_weight" jdbcType="VARCHAR"/>
+        <result property="createUserId" column="create_user_id" jdbcType="INTEGER"/>
+        <result property="createUserName" column="create_user_name" jdbcType="VARCHAR"/>
+        <result property="smokeStationName" column="smoke_station_name" jdbcType="VARCHAR"/>
+        <result property="smokeStationId" column="smoke_station_id" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="YdAcquisitionPlanMap">
+        select
+          id, storehouse_id, storehouse_name, create_time, update_time, start_time, stop_time, acquisition_weight, create_user_id, create_user_name, smoke_station_name, smoke_station_id
+        from yd_tobacco_dev.yd_acquisition_plan
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="YdAcquisitionPlanMap">
+        select
+          id, storehouse_id, storehouse_name, create_time, update_time, start_time, stop_time, acquisition_weight, create_user_id, create_user_name, smoke_station_name, smoke_station_id
+        from yd_tobacco_dev.yd_acquisition_plan
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="YdAcquisitionPlanMap">
+        select
+        id, storehouse_id, storehouse_name, create_time, update_time, start_time, stop_time, acquisition_weight, create_user_id, create_user_name, smoke_station_name, smoke_station_id
+        from yd_tobacco_dev.yd_acquisition_plan
+        <where>
+            <if test="id != null">
+                and id = #{id}
+            </if>
+            <if test="storehouseId != null">
+                and storehouse_id = #{storehouseId}
+            </if>
+            <if test="storehouseName != null and storehouseName != ''">
+                and storehouse_name = #{storehouseName}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="startTime != null">
+                and start_time = #{startTime}
+            </if>
+            <if test="stopTime != null">
+                and stop_time = #{stopTime}
+            </if>
+            <if test="acquisitionWeight != null and acquisitionWeight != ''">
+                and acquisition_weight = #{acquisitionWeight}
+            </if>
+            <if test="createUserId != null">
+                and create_user_id = #{createUserId}
+            </if>
+            <if test="createUserName != null and createUserName != ''">
+                and create_user_name = #{createUserName}
+            </if>
+            <if test="smokeStationName != null and smokeStationName != ''">
+                and smoke_station_name = #{smokeStationName}
+            </if>
+            <if test="smokeStationId != null">
+                and smoke_station_id = #{smokeStationId}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into yd_tobacco_dev.yd_acquisition_plan(storehouse_id, storehouse_name, create_time, update_time, start_time, stop_time, acquisition_weight, create_user_id, create_user_name, smoke_station_name, smoke_station_id)
+        values (#{storehouseId}, #{storehouseName}, #{createTime}, #{updateTime}, #{startTime}, #{stopTime}, #{acquisitionWeight}, #{createUserId}, #{createUserName}, #{smokeStationName}, #{smokeStationId})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update yd_tobacco_dev.yd_acquisition_plan
+        <set>
+            <if test="storehouseId != null">
+                storehouse_id = #{storehouseId},
+            </if>
+            <if test="storehouseName != null and storehouseName != ''">
+                storehouse_name = #{storehouseName},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="startTime != null">
+                start_time = #{startTime},
+            </if>
+            <if test="stopTime != null">
+                stop_time = #{stopTime},
+            </if>
+            <if test="acquisitionWeight != null and acquisitionWeight != ''">
+                acquisition_weight = #{acquisitionWeight},
+            </if>
+            <if test="createUserId != null">
+                create_user_id = #{createUserId},
+            </if>
+            <if test="createUserName != null and createUserName != ''">
+                create_user_name = #{createUserName},
+            </if>
+            <if test="smokeStationName != null and smokeStationName != ''">
+                smoke_station_name = #{smokeStationName},
+            </if>
+            <if test="smokeStationId != null">
+                smoke_station_id = #{smokeStationId},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from yd_tobacco_dev.yd_acquisition_plan where id = #{id}
+    </delete>
+
+
+    <select id="list" resultMap="YdAcquisitionPlanMap">
+        select * from yd_acquisition_plan where   start_time &gt;= #{startTime} and stop_time &lt;= #{stopTime}
+        <if test="storehouseId!=null">
+            and storehouse_id=#{storehouseId}
+        </if>
+        <if test="smokeStationId!=null">
+            and smoke_station_id=#{smokeStationId}
+        </if>
+    </select>
+
+</mapper>

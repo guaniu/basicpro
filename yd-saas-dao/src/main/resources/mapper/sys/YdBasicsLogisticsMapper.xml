@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiding.saas.ydsaas.dao.YdBasicsLogisticsMapper">
+  <resultMap id="BaseResultMap" type="com.yiding.saas.ydsaas.model.YdBasicsLogistics">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="transport_id" jdbcType="INTEGER" property="transportId" />
+    <result column="logistics_date" jdbcType="TIMESTAMP" property="logisticsDate" />
+    <result column="logistics_msg" jdbcType="VARCHAR" property="logisticsMsg" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_by" jdbcType="VARCHAR" property="createBy" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, transport_id, logistics_date, logistics_msg, create_time, create_by
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from yd_basics_logistics
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from yd_basics_logistics
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.yiding.saas.ydsaas.model.YdBasicsLogistics">
+    insert into yd_basics_logistics (id, transport_id, logistics_date, 
+      logistics_msg, create_time, create_by
+      )
+    values (#{id,jdbcType=INTEGER}, #{transportId,jdbcType=INTEGER}, #{logisticsDate,jdbcType=TIMESTAMP}, 
+      #{logisticsMsg,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createBy,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yiding.saas.ydsaas.model.YdBasicsLogistics">
+    insert into yd_basics_logistics
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="transportId != null">
+        transport_id,
+      </if>
+      <if test="logisticsDate != null">
+        logistics_date,
+      </if>
+      <if test="logisticsMsg != null">
+        logistics_msg,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createBy != null">
+        create_by,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="transportId != null">
+        #{transportId,jdbcType=INTEGER},
+      </if>
+      <if test="logisticsDate != null">
+        #{logisticsDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="logisticsMsg != null">
+        #{logisticsMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        #{createBy,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yiding.saas.ydsaas.model.YdBasicsLogistics">
+    update yd_basics_logistics
+    <set>
+      <if test="transportId != null">
+        transport_id = #{transportId,jdbcType=INTEGER},
+      </if>
+      <if test="logisticsDate != null">
+        logistics_date = #{logisticsDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="logisticsMsg != null">
+        logistics_msg = #{logisticsMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createBy != null">
+        create_by = #{createBy,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yiding.saas.ydsaas.model.YdBasicsLogistics">
+    update yd_basics_logistics
+    set transport_id = #{transportId,jdbcType=INTEGER},
+      logistics_date = #{logisticsDate,jdbcType=TIMESTAMP},
+      logistics_msg = #{logisticsMsg,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_by = #{createBy,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

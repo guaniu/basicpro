@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/basicpro.iml" filepath="$PROJECT_DIR$/.idea/basicpro.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yd-saas-common/yd-tobacco-common.iml" filepath="$PROJECT_DIR$/yd-saas-common/yd-tobacco-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yd-saas-dao/yd-tobacco-dao.iml" filepath="$PROJECT_DIR$/yd-saas-dao/yd-tobacco-dao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yd-saas-model/yd-tobacco-model.iml" filepath="$PROJECT_DIR$/yd-saas-model/yd-tobacco-model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yd-saas-service/yd-tobacco-service.iml" filepath="$PROJECT_DIR$/yd-saas-service/yd-tobacco-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/yd-saas-web/yd-tobacco-web.iml" filepath="$PROJECT_DIR$/yd-saas-web/yd-tobacco-web.iml" />
+    </modules>
+  </component>
+</project>

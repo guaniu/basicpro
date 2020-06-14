@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yiding.saas.ydsaas.dao.YdUserMapper">
+
+    <resultMap type="com.yiding.saas.ydsaas.model.YdUser" id="YdUserMap">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="userLoginAccount" column="user_login_account" jdbcType="VARCHAR"/>
+        <result property="userMobile" column="user_mobile" jdbcType="VARCHAR"/>
+        <result property="userComments" column="user_comments" jdbcType="VARCHAR"/>
+        <result property="userPwd" column="user_pwd" jdbcType="VARCHAR"/>
+        <result property="userOrgId" column="user_org_id" jdbcType="INTEGER"/>
+        <result property="userOrgName" column="user_org_name" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="userStatus" column="user_status" jdbcType="INTEGER"/>
+        <result property="roleId" column="role_id" jdbcType="INTEGER"/>
+        <result property="isDel" column="is_del" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="YdUserMap">
+        select
+          id, user_name, user_login_account, user_mobile, user_comments, user_pwd, user_org_id, user_org_name, create_time, update_time, user_status, role_id, is_del
+        from yd_tobacco_dev.yd_user
+        where id = #{id} and is_del=0
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="YdUserMap">
+        select
+          id, user_name, user_login_account, user_mobile, user_comments, user_pwd, user_org_id, user_org_name, create_time, update_time, user_status, role_id, is_del
+        from yd_tobacco_dev.yd_user
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="YdUserMap">
+        select
+        id, user_name, user_login_account, user_mobile, user_comments, user_pwd, user_org_id, user_org_name,
+        create_time, update_time, user_status, role_id, is_del
+        from yd_tobacco_dev.yd_user where is_del=0
+        <if test="id != null">
+            and id = #{id}
+        </if>
+        <if test="userName != null and userName != ''">
+            and user_name = #{userName}
+        </if>
+        <if test="userLoginAccount != null and userLoginAccount != ''">
+            and user_login_account = #{userLoginAccount}
+        </if>
+        <if test="userMobile != null and userMobile != ''">
+            and user_mobile = #{userMobile}
+        </if>
+        <if test="userComments != null">
+            and user_comments = #{userComments}
+        </if>
+        <if test="userPwd != null and userPwd != ''">
+            and user_pwd = #{userPwd}
+        </if>
+        <if test="userOrgId != null">
+            and user_org_id = #{userOrgId}
+        </if>
+        <if test="userOrgName != null and userOrgName != ''">
+            and user_org_name = #{userOrgName}
+        </if>
+        <if test="createTime != null">
+            and create_time = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            and update_time = #{updateTime}
+        </if>
+        <if test="userStatus != null">
+            and user_status = #{userStatus}
+        </if>
+        <if test="roleId != null">
+            and role_id = #{roleId}
+        </if>
+        <if test="isDel != null">
+            and is_del = #{isDel}
+        </if>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into yd_tobacco_dev.yd_user(user_name, user_login_account, user_mobile, user_comments, user_pwd, user_org_id, user_org_name, create_time, update_time, user_status, role_id, is_del)
+        values (#{userName}, #{userLoginAccount}, #{userMobile}, #{userComments}, #{userPwd}, #{userOrgId}, #{userOrgName}, #{createTime}, #{updateTime}, #{userStatus}, #{roleId}, #{isDel})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update yd_tobacco_dev.yd_user
+        <set>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
+            </if>
+            <if test="userLoginAccount != null and userLoginAccount != ''">
+                user_login_account = #{userLoginAccount},
+            </if>
+            <if test="userMobile != null and userMobile != ''">
+                user_mobile = #{userMobile},
+            </if>
+            <if test="userComments != null">
+                user_comments = #{userComments},
+            </if>
+            <if test="userPwd != null and userPwd != ''">
+                user_pwd = #{userPwd},
+            </if>
+            <if test="userOrgId != null">
+                user_org_id = #{userOrgId},
+            </if>
+            <if test="userOrgName != null and userOrgName != ''">
+                user_org_name = #{userOrgName},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="userStatus != null">
+                user_status = #{userStatus},
+            </if>
+            <if test="roleId != null">
+                role_id = #{roleId},
+            </if>
+            <if test="isDel != null">
+                is_del = #{isDel},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from yd_tobacco_dev.yd_user where id = #{id}
+    </delete>
+
+    <select id="findByName" resultMap="YdUserMap">
+        select * from yd_user where user_status=1 and is_del=0 and user_name=#{userName}
+    </select>
+    <select id="findByAccount" resultMap="YdUserMap">
+        select * from yd_user where user_status=1 and is_del=0 and user_login_account=#{account}
+    </select>
+
+
+    <resultMap id="userResultMap" type="com.yiding.saas.ydsaas.vo.UserVo">
+        <result property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="userLoginAccount" column="user_login_account" jdbcType="VARCHAR"/>
+        <result property="userMobile" column="user_mobile" jdbcType="VARCHAR"/>
+        <result property="userOrgId" column="user_org_id" jdbcType="BIGINT"/>
+        <result property="userOrgName" column="user_org_name" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="userStatus" column="user_status" jdbcType="INTEGER"/>
+        <result property="roleId" column="role_id" jdbcType="BIGINT"/>
+        <result property="userStatusName" column="user_status_name"></result>
+        <result property="roleName" column="role_name"></result>
+    </resultMap>
+    <select id="getUserList" resultMap="userResultMap">
+        SELECT
+        `user`.id,`user`.user_name,`user`.user_login_account,`user`.user_mobile,`user`.update_time,user.user_org_name,user_stat.label
+        as user_status_name
+        ,role.name as role_name,role.id as role_id,user_status,user_org_id
+        from yd_user as user LEFT JOIN sys_user_role as user_role on user.id=user_role.user_id
+        LEFT JOIN (SELECT * FROM sys_dict WHERE type = "user_status") AS user_stat on user.user_status=user_stat.value
+        LEFT JOIN sys_role as role on user_role.role_id=role.id
+        WHERE user.is_del=0
+        <if test="id != null">
+            and user.id = #{id}
+        </if>
+        <if test="userName != null and userName != ''">
+            and user_name = #{userName}
+        </if>
+        <if test="userLoginAccount != null and userLoginAccount != ''">
+            and user_login_account = #{userLoginAccount}
+        </if>
+        <if test="userMobile != null and userMobile != ''">
+            and user_mobile = #{userMobile}
+        </if>
+        <if test="userComments != null">
+            and user_comments = #{userComments}
+        </if>
+        <if test="userPwd != null and userPwd != ''">
+            and user_pwd = #{userPwd}
+        </if>
+        <if test="userOrgId != null">
+            and user_org_id = #{userOrgId}
+        </if>
+        <if test="userOrgName != null and userOrgName != ''">
+            and user_org_name = #{userOrgName}
+        </if>
+        <if test="createTime != null">
+            and create_time = #{createTime}
+        </if>
+        <if test="updateTime != null">
+            and update_time = #{updateTime}
+        </if>
+        <if test="userStatus != null">
+            and user_status = #{userStatus}
+        </if>
+        <if test="roleId != null">
+            and role_id = #{roleId}
+        </if>
+    </select>
+
+
+    <select id="findRoleNameByUserId" resultType="java.lang.String">
+        SELECT role.`name` from yd_user as user LEFT JOIN sys_user_role as ref on `user`.id=ref.user_id LEFT JOIN sys_role as role on ref.role_id=role.id WHERE `user`.is_del=0 and role.del_flag=0 and `user`.id=#{userId}
+    </select>
+    
+    <!-- 获取商户单一角色下的全部用户  by chunbo 2020-06-09 -->
+    <select id="selectRoleUserList" resultMap="userResultMap">
+    	select c.`name` as 'roleName',a.user_name as 'userName',a.id from yd_user a LEFT JOIN sys_user_role b on a.id = b.user_id LEFT JOIN sys_role c on b.role_id = c.id 
+        where a.is_del = 0 and c.del_flag = 0 and c.id = #{roleId} and a.user_org_id = #{userOrgId}
+    </select>
+</mapper>
