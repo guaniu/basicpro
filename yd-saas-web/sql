@@ -1,0 +1,957 @@
+/*
+Navicat MySQL Data Transfer
+
+Source Server         : 186-tobacco
+Source Server Version : 50726
+Source Host           : 39.100.80.186:3306
+Source Database       : yd_tobacco_dev
+
+Target Server Type    : MYSQL
+Target Server Version : 50726
+File Encoding         : 65001
+
+Date: 2020-06-14 13:32:32
+*/
+
+SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for `sys_dict`
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_dict`;
+CREATE TABLE `sys_dict` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `value` varchar(100) NOT NULL COMMENT '数据值',
+  `label` varchar(100) NOT NULL COMMENT '标签名',
+  `type` varchar(100) NOT NULL COMMENT '类型',
+  `description` varchar(100) NOT NULL COMMENT '描述',
+  `sort` decimal(10,0) NOT NULL COMMENT '排序（升序）',
+  `create_by` varchar(50) DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `last_update_by` varchar(50) DEFAULT NULL COMMENT '更新人',
+  `last_update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `remarks` varchar(255) DEFAULT NULL COMMENT '备注信息',
+  `del_flag` tinyint(4) DEFAULT '0' COMMENT '是否删除  -1：已删除  0：正常',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COMMENT='字典表';
+
+-- ----------------------------
+-- Records of sys_dict
+-- ----------------------------
+INSERT INTO `sys_dict` VALUES ('3', '0', '停用', 'user_status', '用户状态', '0', 'admin', '2019-08-09 01:08:23', null, null, 'remark', '0');
+INSERT INTO `sys_dict` VALUES ('4', '1', '正常', 'user_status', '用户状态', '0', 'admin', '2019-08-09 01:08:40', null, null, 'remark', '0');
+INSERT INTO `sys_dict` VALUES ('8', '1', '男', 'sex', '性别', '0', null, '2020-05-25 15:08:01', null, '2020-05-25 15:08:01', null, '0');
+INSERT INTO `sys_dict` VALUES ('9', '2', '女', 'sex', '性别', '0', null, '2020-05-25 15:08:01', null, '2020-05-25 15:08:01', null, '0');
+INSERT INTO `sys_dict` VALUES ('10', '1', '企业', 'org_type', '组织类型', '0', null, '2020-05-25 15:08:01', null, '2020-05-25 15:08:01', null, '0');
+INSERT INTO `sys_dict` VALUES ('11', '2', '烟站', 'org_type', '组织类型', '0', null, '2020-05-25 15:08:01', null, '2020-05-25 15:08:01', null, '0');
+INSERT INTO `sys_dict` VALUES ('12', '3', '复烤厂', 'org_type', '组织类型', '0', null, '2020-05-25 15:08:01', null, '2020-05-25 15:08:01', null, '0');
+INSERT INTO `sys_dict` VALUES ('14', '1', '正常', 'org_status', '组织状态', '0', null, '2020-05-25 15:08:01', null, '2020-05-25 15:08:01', null, '0');
+INSERT INTO `sys_dict` VALUES ('15', '0', '停用', 'org_status', '组织状态', '0', null, '2020-05-25 15:08:01', null, '2020-05-25 15:08:01', null, '0');
+INSERT INTO `sys_dict` VALUES ('16', '4', '仓库', 'org_type', '组织类型', '0', null, null, null, null, null, '0');
+INSERT INTO `sys_dict` VALUES ('19', '1', '云烟87', 'tobacco_type', '烟叶品种', '0', null, null, null, null, null, '0');
+INSERT INTO `sys_dict` VALUES ('20', '2', '云烟85', 'tobacco_type', '烟叶品种', '0', null, null, null, null, null, '0');
+INSERT INTO `sys_dict` VALUES ('21', '3', '云烟97', 'tobacco_type', '烟叶品种', '0', null, null, null, null, null, '0');
+INSERT INTO `sys_dict` VALUES ('22', '1', '停车超时', 'warn_type', '告警类型', '0', null, null, null, null, null, '0');
+INSERT INTO `sys_dict` VALUES ('23', '2', '低电量', 'warn_type', '告警类型', '0', null, null, null, null, null, '0');
+INSERT INTO `sys_dict` VALUES ('24', '3', '丢失', 'warn_type', '告警类型', '0', null, null, null, null, null, '0');
+INSERT INTO `sys_dict` VALUES ('25', '4', '拆卸', 'warn_type', '告警类型', '0', null, null, null, null, null, '0');
+INSERT INTO `sys_dict` VALUES ('26', '0', '未处理', 'warn_process', '告警处理', '0', null, null, null, null, null, '0');
+INSERT INTO `sys_dict` VALUES ('27', '1', '已处理', 'warn_process', '告警处理', '0', null, null, null, null, null, '0');
+
+-- ----------------------------
+-- Table structure for `sys_menu`
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_menu`;
+CREATE TABLE `sys_menu` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(150) COLLATE utf16_bin DEFAULT NULL COMMENT '菜单名称',
+  `parent_id` bigint(20) DEFAULT NULL COMMENT '父菜单ID，一级菜单为0',
+  `url` varchar(600) COLLATE utf16_bin DEFAULT NULL COMMENT '菜单URL,类型：1.普通页面（如用户管理， /sys/user） 2.嵌套完整外部页面，以http(s)开头的链接 3.嵌套服务器页面，使用iframe:前缀+目标URL(如SQL监控， iframe:/druid/login.html, iframe:前缀会替换成服务器地址)',
+  `perms` varchar(1500) COLLATE utf16_bin DEFAULT NULL COMMENT '授权(多个用逗号分隔，如：sys:user:add,sys:user:edit)',
+  `type` int(11) DEFAULT NULL COMMENT '类型 0：目录 1：菜单 2：按钮',
+  `icon` varchar(150) COLLATE utf16_bin DEFAULT NULL COMMENT '菜单图标',
+  `order_num` int(11) DEFAULT NULL COMMENT '排序',
+  `create_by` varchar(150) COLLATE utf16_bin DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `last_update_by` varchar(150) COLLATE utf16_bin DEFAULT NULL COMMENT '更新人',
+  `last_update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `del_flag` tinyint(4) DEFAULT NULL COMMENT '是否删除 -1：已删除 0：正常',
+  `is_app` int(2) DEFAULT NULL COMMENT 'app是否使用 0：使用 1不使用',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf16 COLLATE=utf16_bin;
+
+-- ----------------------------
+-- Records of sys_menu
+-- ----------------------------
+INSERT INTO `sys_menu` VALUES ('5', '系统设置', '0', '/system', null, '1', null, '5', null, '2020-05-28 10:17:09', null, '2020-05-28 10:17:09', '0', '1');
+INSERT INTO `sys_menu` VALUES ('6', '角色管理', '5', '/system/roles', null, '1', null, '6', null, '2020-05-28 10:17:09', null, '2020-05-28 10:17:09', '0', '1');
+INSERT INTO `sys_menu` VALUES ('7', '菜单管理', '5', '/system/menu', null, '1', null, '7', null, '2020-05-28 10:17:09', null, '2020-05-28 10:17:09', '0', '1');
+INSERT INTO `sys_menu` VALUES ('8', '运单信息', '8', '/track/waybill-detail', '', '1', '', '0', null, null, null, null, null, null);
+INSERT INTO `sys_menu` VALUES ('9', '运单管理', '8', 'track/waybill', '', '1', '', '0', null, null, null, null, null, null);
+INSERT INTO `sys_menu` VALUES ('10', '运输管理', '0', '/track', '', '1', 'fa fa-truck', '0', null, null, null, null, null, null);
+INSERT INTO `sys_menu` VALUES ('11', '运单管理', '10', '/track/waybill', '', '1', '', '0', null, null, null, null, null, null);
+INSERT INTO `sys_menu` VALUES ('12', '运单信息', '10', '/track/waybill-detail', '', '1', '', '0', null, null, null, null, null, null);
+INSERT INTO `sys_menu` VALUES ('14', '异常告警', '10', '/track/abnormal-alarm', '', '1', '', '0', null, null, null, null, null, null);
+INSERT INTO `sys_menu` VALUES ('15', '新增', '14', null, 'sys:test:add', '2', null, null, null, null, null, null, null, null);
+
+-- ----------------------------
+-- Table structure for `sys_role`
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_role`;
+CREATE TABLE `sys_role` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `name` varchar(300) COLLATE utf16_bin DEFAULT NULL COMMENT '角色名称',
+  `remark` varchar(300) COLLATE utf16_bin DEFAULT NULL COMMENT '备注',
+  `create_by` varchar(150) COLLATE utf16_bin DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `last_update_by` varchar(150) COLLATE utf16_bin DEFAULT NULL COMMENT '最后更新人',
+  `last_update_time` datetime DEFAULT NULL COMMENT '最后更新时间',
+  `del_flag` tinyint(4) DEFAULT NULL COMMENT '是否删除 -1：已删除 0：正常',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf16 COLLATE=utf16_bin;
+
+-- ----------------------------
+-- Records of sys_role
+-- ----------------------------
+INSERT INTO `sys_role` VALUES ('1', '管理员', '超级管理员', 'admin', '2018-08-14 11:11:11', 'admin', '2018-09-23 19:07:18', '0');
+INSERT INTO `sys_role` VALUES ('2', 'jin', 'jin', 'jin', null, null, null, '0');
+INSERT INTO `sys_role` VALUES ('3', '仓存主管', '仓库主管', null, '2020-06-09 10:23:39', null, null, '0');
+INSERT INTO `sys_role` VALUES ('4', '站长', '站长', null, '2020-06-09 10:24:08', null, null, '0');
+INSERT INTO `sys_role` VALUES ('5', '点长', '点长', null, '2020-06-09 10:24:27', null, null, '0');
+INSERT INTO `sys_role` VALUES ('6', '收货员', '收货员', null, '2020-06-09 10:24:50', null, null, '0');
+INSERT INTO `sys_role` VALUES ('8', '场长/仓库管理员', '场长/仓库管理员', null, '2020-06-09 11:22:20', null, '2020-06-09 11:22:20', '0');
+INSERT INTO `sys_role` VALUES ('9', '设备回收人员', '设备回收人员', null, '2020-06-09 11:22:20', null, '2020-06-09 11:22:20', '0');
+
+-- ----------------------------
+-- Table structure for `sys_role_menu`
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_role_menu`;
+CREATE TABLE `sys_role_menu` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `role_id` bigint(20) DEFAULT NULL COMMENT '角色ID',
+  `menu_id` bigint(20) DEFAULT NULL COMMENT '菜单ID',
+  `create_by` varchar(50) DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `last_update_by` varchar(50) DEFAULT NULL COMMENT '更新人',
+  `last_update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 COMMENT='角色菜单';
+
+-- ----------------------------
+-- Records of sys_role_menu
+-- ----------------------------
+INSERT INTO `sys_role_menu` VALUES ('18', '2', '10', null, null, null, null);
+INSERT INTO `sys_role_menu` VALUES ('19', '2', '11', null, null, null, null);
+INSERT INTO `sys_role_menu` VALUES ('20', '2', '1', null, null, null, null);
+INSERT INTO `sys_role_menu` VALUES ('21', '2', '2', null, null, null, null);
+INSERT INTO `sys_role_menu` VALUES ('22', '2', '3', null, null, null, null);
+INSERT INTO `sys_role_menu` VALUES ('23', '2', '4', null, null, null, null);
+INSERT INTO `sys_role_menu` VALUES ('24', '2', '15', null, null, null, null);
+INSERT INTO `sys_role_menu` VALUES ('25', '1', '10', null, null, null, null);
+INSERT INTO `sys_role_menu` VALUES ('26', '1', '11', null, null, null, null);
+INSERT INTO `sys_role_menu` VALUES ('27', '1', '12', null, null, null, null);
+INSERT INTO `sys_role_menu` VALUES ('28', '1', '14', null, null, null, null);
+INSERT INTO `sys_role_menu` VALUES ('29', '1', '15', null, null, null, null);
+INSERT INTO `sys_role_menu` VALUES ('30', '1', '5', null, null, null, null);
+INSERT INTO `sys_role_menu` VALUES ('31', '1', '6', null, null, null, null);
+INSERT INTO `sys_role_menu` VALUES ('32', '1', '7', null, null, null, null);
+
+-- ----------------------------
+-- Table structure for `sys_user`
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_user`;
+CREATE TABLE `sys_user` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `name` varchar(50) NOT NULL COMMENT '用户名',
+  `password` varchar(100) DEFAULT NULL COMMENT '密码',
+  `salt` varchar(40) DEFAULT NULL COMMENT '盐',
+  `email` varchar(100) DEFAULT NULL COMMENT '邮箱',
+  `mobile` varchar(100) DEFAULT NULL COMMENT '手机号',
+  `status` tinyint(4) DEFAULT NULL COMMENT '状态  0：禁用   1：正常',
+  `dept_id` bigint(20) DEFAULT NULL COMMENT '机构ID',
+  `create_by` varchar(50) DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `last_update_by` varchar(50) DEFAULT NULL COMMENT '更新人',
+  `last_update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `del_flag` tinyint(4) DEFAULT '0' COMMENT '是否删除  -1：已删除  0：正常',
+  `enterprise_id` int(11) DEFAULT NULL COMMENT '企业id',
+  `scope_type` int(2) DEFAULT '0' COMMENT '0 默认 1 自定义',
+  `cattlefarm_id` int(11) DEFAULT NULL COMMENT '牛场id',
+  `real_name` varchar(50) DEFAULT NULL COMMENT '真实姓名',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=185 DEFAULT CHARSET=utf8 COMMENT='用户管理';
+
+-- ----------------------------
+-- Records of sys_user
+-- ----------------------------
+INSERT INTO `sys_user` VALUES ('1', 'admin', '3be49bd50b8e50f06963c3de8f23349b', '83201a5a9f9248fb9226', 'admin@qq.com', '13612345678', '1', '4', 'admin', '2018-08-14 11:11:11', 'admin', '2018-08-14 11:11:11', '0', null, '0', null, '管理员');
+INSERT INTO `sys_user` VALUES ('183', '牛b家的牛小谁', '7cd7614ef181db7381f39dc3a240ba11', '3a92d41be3b748fdab30', '12312313', '5626262626', '1', '88', null, '2019-08-05 01:18:26', null, null, '0', '76', '0', '0', null);
+INSERT INTO `sys_user` VALUES ('184', 'ce', '3ba26eda02ed60f664fc70584b0e8cd6', '111111', null, null, '1', null, null, null, null, null, '0', null, '0', null, null);
+
+-- ----------------------------
+-- Table structure for `sys_user_role`
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_user_role`;
+CREATE TABLE `sys_user_role` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `user_id` bigint(20) DEFAULT NULL COMMENT '用户ID',
+  `role_id` bigint(20) DEFAULT NULL COMMENT '角色ID',
+  `create_by` varchar(50) DEFAULT NULL COMMENT '创建人',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `last_update_by` varchar(50) DEFAULT NULL COMMENT '更新人',
+  `last_update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='用户角色';
+
+-- ----------------------------
+-- Records of sys_user_role
+-- ----------------------------
+INSERT INTO `sys_user_role` VALUES ('4', '2', '2', null, null, null, null);
+INSERT INTO `sys_user_role` VALUES ('5', '1', '1', null, null, null, null);
+INSERT INTO `sys_user_role` VALUES ('6', '109', '6', null, '2020-06-09 10:41:10', null, null);
+
+-- ----------------------------
+-- Table structure for `tmp_org`
+-- ----------------------------
+DROP TABLE IF EXISTS `tmp_org`;
+CREATE TABLE `tmp_org` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `org_name` varchar(255) DEFAULT NULL,
+  `org_full_name` varchar(255) DEFAULT NULL,
+  `org_code` varchar(255) DEFAULT NULL,
+  `parent_id` int(11) DEFAULT '0',
+  `parent_name` varchar(255) DEFAULT NULL,
+  `org_type` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of tmp_org
+-- ----------------------------
+INSERT INTO `tmp_org` VALUES ('1', '文山烟草公司', '云南省烟草公司文山州公司', 'wsycgs', '0', '无', '1');
+INSERT INTO `tmp_org` VALUES ('2', '砚山县分公司', '云南省烟草公司文山州公司砚山县分公司', 'ysxfgs', '1', '文山烟草公司', '1');
+INSERT INTO `tmp_org` VALUES ('3', '平远烟站洪福点', '平远烟叶工作站洪福收购点', 'pyhfd', '2', '砚山县分公司', '2');
+INSERT INTO `tmp_org` VALUES ('4', '云南复烤公司', '云南烟叶复烤有限责任公司', 'ynfkgs', '0', '无', '1');
+INSERT INTO `tmp_org` VALUES ('5', '文山复烤厂', '文山州复烤厂', 'wsfkc', '4', '云南复烤公司', '4');
+
+-- ----------------------------
+-- Table structure for `yd_acquisition_plan`
+-- ----------------------------
+DROP TABLE IF EXISTS `yd_acquisition_plan`;
+CREATE TABLE `yd_acquisition_plan` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `storehouse_id` bigint(20) NOT NULL COMMENT '组织id(这里只有仓库)',
+  `storehouse_name` varchar(255) DEFAULT NULL COMMENT '仓库名称(冗余)',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `start_time` datetime DEFAULT NULL COMMENT '计划开始时间',
+  `stop_time` datetime DEFAULT NULL COMMENT '计划截止时间',
+  `acquisition_weight` varchar(255) DEFAULT NULL COMMENT '计划年收购数量(kg)',
+  `create_user_id` bigint(20) DEFAULT NULL COMMENT '创建人id',
+  `create_user_name` varchar(255) DEFAULT NULL COMMENT '创建人名称(冗余)',
+  `smoke_station_name` varchar(255) DEFAULT NULL COMMENT '烟站名称',
+  `smoke_station_id` bigint(20) DEFAULT NULL COMMENT '烟站id',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='收购计划';
+
+-- ----------------------------
+-- Records of yd_acquisition_plan
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `yd_basics_logistics`
+-- ----------------------------
+DROP TABLE IF EXISTS `yd_basics_logistics`;
+CREATE TABLE `yd_basics_logistics` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '物流信息表id',
+  `transport_id` int(11) DEFAULT NULL COMMENT '运单id',
+  `logistics_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '物流消息发生时间',
+  `logistics_msg` varchar(255) DEFAULT NULL COMMENT '物流消息具体内容',
+  `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '开始时间',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建人',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of yd_basics_logistics
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `yd_basics_product_info`
+-- ----------------------------
+DROP TABLE IF EXISTS `yd_basics_product_info`;
+CREATE TABLE `yd_basics_product_info` (
+  `id` int(4) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `address` varchar(255) DEFAULT NULL COMMENT '产地信息',
+  `tabacco_grower` varchar(255) DEFAULT NULL COMMENT '烟农',
+  `log_id` int(4) DEFAULT NULL COMMENT '出入库明细id',
+  `district_ids` varchar(255) DEFAULT NULL COMMENT '地区id集合',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of yd_basics_product_info
+-- ----------------------------
+INSERT INTO `yd_basics_product_info` VALUES ('20', '测试地址', '烟农1', '24', '-1-2-3-');
+INSERT INTO `yd_basics_product_info` VALUES ('21', '测试地址', '烟农1', '25', '-1-2-3-');
+INSERT INTO `yd_basics_product_info` VALUES ('22', '测试地址', '烟农1', '26', '-1-2-3-');
+INSERT INTO `yd_basics_product_info` VALUES ('23', '测试地址', '烟农1', '27', '-1-2-3-');
+INSERT INTO `yd_basics_product_info` VALUES ('24', '测试地址', '烟农1', '28', '-1-2-3-');
+INSERT INTO `yd_basics_product_info` VALUES ('25', '测试地址', '烟农1', '29', '-1-2-3-');
+
+-- ----------------------------
+-- Table structure for `yd_basics_warehouse`
+-- ----------------------------
+DROP TABLE IF EXISTS `yd_basics_warehouse`;
+CREATE TABLE `yd_basics_warehouse` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `tobacco_id` int(11) DEFAULT NULL COMMENT '烟叶信息id',
+  `district_id` int(11) DEFAULT NULL COMMENT '地区id',
+  `org_id` int(11) DEFAULT NULL COMMENT '组织id（仓库id）',
+  `org_ids` varchar(255) DEFAULT NULL COMMENT '组织id集合（用于数据权限）',
+  `package_type` varchar(255) DEFAULT NULL COMMENT '打包类型（0烟包1烟框）',
+  `weight_one` varchar(255) DEFAULT NULL COMMENT '重量（kg）（库存）',
+  `unit_one` varchar(255) DEFAULT NULL COMMENT '单位（kg）',
+  `weight_two` varchar(255) DEFAULT NULL COMMENT '重量（担）（库存）',
+  `unit_two` varchar(255) DEFAULT NULL COMMENT '单位（担）',
+  `tobacco_station` varchar(255) DEFAULT NULL COMMENT '所属烟站（发货单位/收货单位）',
+  `capacity` varchar(255) DEFAULT NULL COMMENT '仓库总容量',
+  `package_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '打包时间',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建人',
+  `create_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `status` int(4) DEFAULT NULL COMMENT '0 烟站仓库 1复烤厂仓库',
+  `is_valid` int(4) DEFAULT NULL COMMENT '0有效1无效',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of yd_basics_warehouse
+-- ----------------------------
+INSERT INTO `yd_basics_warehouse` VALUES ('17', '2', '8', '15', '-2-5-6-', '0', '3760.0', 'kg', '75.2', '担', '烟站', null, '2020-06-02 17:06:01', null, null, '0', '0');
+INSERT INTO `yd_basics_warehouse` VALUES ('19', '2', '8', '0', '-0-1-2-', '0', '40.0', 'kg', '0.8', '担', '复烤厂站', null, '2020-06-02 17:06:01', null, null, '1', '0');
+
+-- ----------------------------
+-- Table structure for `yd_basics_warehouse_log`
+-- ----------------------------
+DROP TABLE IF EXISTS `yd_basics_warehouse_log`;
+CREATE TABLE `yd_basics_warehouse_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `org_id` int(4) DEFAULT NULL COMMENT '组织id（仓库id）',
+  `org_ids` varchar(11) DEFAULT NULL COMMENT '组织id集合（应用数据权限）',
+  `in_out_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '出/入库时间',
+  `in_out_type` varchar(255) DEFAULT NULL COMMENT '出/入库类型（0入库1出库）',
+  `rfid` varchar(255) DEFAULT NULL COMMENT '文山扣号',
+  `tobacco_id` int(11) DEFAULT NULL COMMENT '烟叶信息id',
+  `variety` varchar(255) DEFAULT NULL COMMENT '品种',
+  `package_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '打包时间',
+  `package_type` varchar(255) DEFAULT NULL COMMENT '打包类型（0烟包1烟框）',
+  `count` double(16,2) DEFAULT NULL COMMENT '出/入库数量',
+  `unit` varchar(255) DEFAULT NULL COMMENT '单位',
+  `weight` varchar(255) DEFAULT NULL COMMENT '重量（kg 担转kg）',
+  `weight_log` varchar(255) DEFAULT NULL COMMENT '重量（担）',
+  `tobacco_station` varchar(255) DEFAULT NULL COMMENT '所属烟站（发货单位）',
+  `repet_tobacco_station` varchar(255) DEFAULT NULL COMMENT '所属烟站(收货单位)',
+  `status` int(4) DEFAULT NULL COMMENT '0 烟站仓库 1复烤厂仓库',
+  `sugar` varchar(255) DEFAULT NULL COMMENT '总糖',
+  `nicotine` varchar(255) DEFAULT NULL COMMENT '烟碱',
+  `nitrogen` varchar(255) DEFAULT NULL COMMENT '总氮',
+  `protein` varchar(255) DEFAULT NULL COMMENT '蛋白质',
+  `create_by` varchar(255) DEFAULT NULL COMMENT '创建人',
+  `create_date` timestamp NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `is_valid` int(4) DEFAULT NULL COMMENT '是否有效(0有效1无效)',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of yd_basics_warehouse_log
+-- ----------------------------
+INSERT INTO `yd_basics_warehouse_log` VALUES ('24', '15', '-2-5-', '2020-06-04 01:34:11', '0', '123456', '2', '1', '2020-06-02 17:06:01', '0', '1.00', null, '40.0', '0.8', '烟站', null, '0', '总糖', '烟碱', '总氮', '蛋白质', null, '2020-06-05 15:55:30', '0');
+INSERT INTO `yd_basics_warehouse_log` VALUES ('25', '15', '-2-5-', '2020-06-12 02:06:37', '0', '1324', '2', null, '2020-06-02 17:06:01', '0', '1.00', null, '40.0', '0.8', '烟站', null, '0', '总糖', null, '总氮', '蛋白质', null, '2020-06-05 15:55:30', '0');
+INSERT INTO `yd_basics_warehouse_log` VALUES ('26', '15', '-2-5-', '2020-06-12 02:11:06', '1', '123456', '0', null, '2020-06-02 17:06:01', '0', '1.00', null, '40.0', '0.8', '烟站', null, '0', '总糖', null, '总氮', '蛋白质', null, '2020-06-05 15:55:30', '0');
+INSERT INTO `yd_basics_warehouse_log` VALUES ('27', '15', '-2-5-', '2020-06-12 02:21:12', '1', '1324', '0', null, '2020-06-02 17:06:01', '0', '1.00', null, '40.0', '0.8', '烟站', null, '0', '总糖', null, '总氮', '蛋白质', null, '2020-06-05 15:55:30', '0');
+
+-- ----------------------------
+-- Table structure for `yd_district`
+-- ----------------------------
+DROP TABLE IF EXISTS `yd_district`;
+CREATE TABLE `yd_district` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `district_name` varchar(255) DEFAULT NULL COMMENT '行政区名称',
+  `district_code` varchar(255) DEFAULT NULL COMMENT '行政区编码',
+  `create_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  `parent_id` int(11) NOT NULL COMMENT '父id',
+  `district_level` varchar(255) DEFAULT NULL COMMENT '行政区级别(city:市,district:县,street:乡镇)',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=117 DEFAULT CHARSET=utf8 COMMENT='行政区';
+
+-- ----------------------------
+-- Records of yd_district
+-- ----------------------------
+INSERT INTO `yd_district` VALUES ('1', '文山壮族苗族自治州', null, '2020-05-29 04:42:32', null, '0', 'city');
+INSERT INTO `yd_district` VALUES ('2', '丘北县', null, '2020-05-29 04:42:33', null, '1', 'district');
+INSERT INTO `yd_district` VALUES ('3', '官寨乡', null, '2020-05-29 04:42:33', null, '2', 'street');
+INSERT INTO `yd_district` VALUES ('4', '天星乡', null, '2020-05-29 04:42:33', null, '2', 'street');
+INSERT INTO `yd_district` VALUES ('5', '双龙营镇', null, '2020-05-29 04:42:33', null, '2', 'street');
+INSERT INTO `yd_district` VALUES ('6', '温浏乡', null, '2020-05-29 04:42:33', null, '2', 'street');
+INSERT INTO `yd_district` VALUES ('7', '锦屏镇', null, '2020-05-29 04:42:33', null, '2', 'street');
+INSERT INTO `yd_district` VALUES ('8', '平寨乡', null, '2020-05-29 04:42:33', null, '2', 'street');
+INSERT INTO `yd_district` VALUES ('9', '腻脚彝族乡', null, '2020-05-29 04:42:33', null, '2', 'street');
+INSERT INTO `yd_district` VALUES ('10', '舍得彝族乡', null, '2020-05-29 04:42:33', null, '2', 'street');
+INSERT INTO `yd_district` VALUES ('11', '树皮彝族乡', null, '2020-05-29 04:42:33', null, '2', 'street');
+INSERT INTO `yd_district` VALUES ('12', '曰者镇', null, '2020-05-29 04:42:33', null, '2', 'street');
+INSERT INTO `yd_district` VALUES ('13', '新店彝族乡', null, '2020-05-29 04:42:33', null, '2', 'street');
+INSERT INTO `yd_district` VALUES ('14', '八道哨彝族乡', null, '2020-05-29 04:42:34', null, '2', 'street');
+INSERT INTO `yd_district` VALUES ('15', '广南县', null, '2020-05-29 04:42:34', null, '1', 'district');
+INSERT INTO `yd_district` VALUES ('16', '那洒镇', null, '2020-05-29 04:42:34', null, '15', 'street');
+INSERT INTO `yd_district` VALUES ('17', '黑支果乡', null, '2020-05-29 04:42:34', null, '15', 'street');
+INSERT INTO `yd_district` VALUES ('18', '八宝镇', null, '2020-05-29 04:42:34', null, '15', 'street');
+INSERT INTO `yd_district` VALUES ('19', '珠街镇', null, '2020-05-29 04:42:34', null, '15', 'street');
+INSERT INTO `yd_district` VALUES ('20', '篆角乡', null, '2020-05-29 04:42:34', null, '15', 'street');
+INSERT INTO `yd_district` VALUES ('21', '杨柳井乡', null, '2020-05-29 04:42:34', null, '15', 'street');
+INSERT INTO `yd_district` VALUES ('22', '董堡乡', null, '2020-05-29 04:42:34', null, '15', 'street');
+INSERT INTO `yd_district` VALUES ('23', '者太乡', null, '2020-05-29 04:42:34', null, '15', 'street');
+INSERT INTO `yd_district` VALUES ('24', '曙光乡', null, '2020-05-29 04:42:34', null, '15', 'street');
+INSERT INTO `yd_district` VALUES ('25', '南屏镇', null, '2020-05-29 04:42:34', null, '15', 'street');
+INSERT INTO `yd_district` VALUES ('26', '莲城镇', null, '2020-05-29 04:42:34', null, '15', 'street');
+INSERT INTO `yd_district` VALUES ('27', '五珠乡', null, '2020-05-29 04:42:34', null, '15', 'street');
+INSERT INTO `yd_district` VALUES ('28', '珠琳镇', null, '2020-05-29 04:42:34', null, '15', 'street');
+INSERT INTO `yd_district` VALUES ('29', '者兔乡', null, '2020-05-29 04:42:34', null, '15', 'street');
+INSERT INTO `yd_district` VALUES ('30', '旧莫乡', null, '2020-05-29 04:42:34', null, '15', 'street');
+INSERT INTO `yd_district` VALUES ('31', '底圩乡', null, '2020-05-29 04:42:34', null, '15', 'street');
+INSERT INTO `yd_district` VALUES ('32', '板蚌乡', null, '2020-05-29 04:42:34', null, '15', 'street');
+INSERT INTO `yd_district` VALUES ('33', '坝美镇', null, '2020-05-29 04:42:34', null, '15', 'street');
+INSERT INTO `yd_district` VALUES ('34', '砚山县', null, '2020-05-29 04:42:34', null, '1', 'district');
+INSERT INTO `yd_district` VALUES ('35', '蚌峨乡', null, '2020-05-29 04:42:34', null, '34', 'street');
+INSERT INTO `yd_district` VALUES ('36', '者腊乡', null, '2020-05-29 04:42:34', null, '34', 'street');
+INSERT INTO `yd_district` VALUES ('37', '稼依管理区', null, '2020-05-29 04:42:34', null, '34', 'street');
+INSERT INTO `yd_district` VALUES ('38', '维末彝族乡', null, '2020-05-29 04:42:34', null, '34', 'street');
+INSERT INTO `yd_district` VALUES ('39', '回龙管理区', null, '2020-05-29 04:42:34', null, '34', 'street');
+INSERT INTO `yd_district` VALUES ('40', '江那镇', null, '2020-05-29 04:42:34', null, '34', 'street');
+INSERT INTO `yd_district` VALUES ('41', '八嘎乡', null, '2020-05-29 04:42:34', null, '34', 'street');
+INSERT INTO `yd_district` VALUES ('42', '阿舍彝族乡', null, '2020-05-29 04:42:34', null, '34', 'street');
+INSERT INTO `yd_district` VALUES ('43', '干河彝族乡', null, '2020-05-29 04:42:34', null, '34', 'street');
+INSERT INTO `yd_district` VALUES ('44', '阿猛镇', null, '2020-05-29 04:42:35', null, '34', 'street');
+INSERT INTO `yd_district` VALUES ('45', '稼依镇', null, '2020-05-29 04:42:35', null, '34', 'street');
+INSERT INTO `yd_district` VALUES ('46', '盘龙彝族乡', null, '2020-05-29 04:42:35', null, '34', 'street');
+INSERT INTO `yd_district` VALUES ('47', '平远管理区', null, '2020-05-29 04:42:35', null, '34', 'street');
+INSERT INTO `yd_district` VALUES ('48', '平远镇', null, '2020-05-29 04:42:35', null, '34', 'street');
+INSERT INTO `yd_district` VALUES ('49', '文山市', null, '2020-05-29 04:42:35', null, '1', 'district');
+INSERT INTO `yd_district` VALUES ('50', '东山彝族乡', null, '2020-05-29 04:42:35', null, '49', 'street');
+INSERT INTO `yd_district` VALUES ('51', '小街镇', null, '2020-05-29 04:42:35', null, '49', 'street');
+INSERT INTO `yd_district` VALUES ('52', '新平街道', null, '2020-05-29 04:42:35', null, '49', 'street');
+INSERT INTO `yd_district` VALUES ('53', '柳井彝族乡', null, '2020-05-29 04:42:35', null, '49', 'street');
+INSERT INTO `yd_district` VALUES ('54', '卧龙街道', null, '2020-05-29 04:42:35', null, '49', 'street');
+INSERT INTO `yd_district` VALUES ('55', '红甸回族乡', null, '2020-05-29 04:42:35', null, '49', 'street');
+INSERT INTO `yd_district` VALUES ('56', '薄竹镇', null, '2020-05-29 04:42:35', null, '49', 'street');
+INSERT INTO `yd_district` VALUES ('57', '喜古乡', null, '2020-05-29 04:42:35', null, '49', 'street');
+INSERT INTO `yd_district` VALUES ('58', '古木镇', null, '2020-05-29 04:42:35', null, '49', 'street');
+INSERT INTO `yd_district` VALUES ('59', '新街乡', null, '2020-05-29 04:42:35', null, '49', 'street');
+INSERT INTO `yd_district` VALUES ('60', '秉烈彝族乡', null, '2020-05-29 04:42:35', null, '49', 'street');
+INSERT INTO `yd_district` VALUES ('61', '追栗街镇', null, '2020-05-29 04:42:35', null, '49', 'street');
+INSERT INTO `yd_district` VALUES ('62', '马塘镇', null, '2020-05-29 04:42:35', null, '49', 'street');
+INSERT INTO `yd_district` VALUES ('63', '平坝镇', null, '2020-05-29 04:42:35', null, '49', 'street');
+INSERT INTO `yd_district` VALUES ('64', '德厚镇', null, '2020-05-29 04:42:35', null, '49', 'street');
+INSERT INTO `yd_district` VALUES ('65', '开化街道', null, '2020-05-29 04:42:35', null, '49', 'street');
+INSERT INTO `yd_district` VALUES ('66', '坝心彝族乡', null, '2020-05-29 04:42:35', null, '49', 'street');
+INSERT INTO `yd_district` VALUES ('67', '西畴县', null, '2020-05-29 04:42:35', null, '1', 'district');
+INSERT INTO `yd_district` VALUES ('68', '柏林乡', null, '2020-05-29 04:42:35', null, '67', 'street');
+INSERT INTO `yd_district` VALUES ('69', '西洒镇', null, '2020-05-29 04:42:35', null, '67', 'street');
+INSERT INTO `yd_district` VALUES ('70', '新马街乡', null, '2020-05-29 04:42:35', null, '67', 'street');
+INSERT INTO `yd_district` VALUES ('71', '法斗乡', null, '2020-05-29 04:42:35', null, '67', 'street');
+INSERT INTO `yd_district` VALUES ('72', '兴街镇', null, '2020-05-29 04:42:36', null, '67', 'street');
+INSERT INTO `yd_district` VALUES ('73', '鸡街乡', null, '2020-05-29 04:42:36', null, '67', 'street');
+INSERT INTO `yd_district` VALUES ('74', '莲花塘乡', null, '2020-05-29 04:42:36', null, '67', 'street');
+INSERT INTO `yd_district` VALUES ('75', '蚌谷乡', null, '2020-05-29 04:42:36', null, '67', 'street');
+INSERT INTO `yd_district` VALUES ('76', '董马乡', null, '2020-05-29 04:42:36', null, '67', 'street');
+INSERT INTO `yd_district` VALUES ('77', '马关县', null, '2020-05-29 04:42:36', null, '1', 'district');
+INSERT INTO `yd_district` VALUES ('78', '金厂镇', null, '2020-05-29 04:42:36', null, '77', 'street');
+INSERT INTO `yd_district` VALUES ('79', '古林箐乡', null, '2020-05-29 04:42:36', null, '77', 'street');
+INSERT INTO `yd_district` VALUES ('80', '南捞乡', null, '2020-05-29 04:42:36', null, '77', 'street');
+INSERT INTO `yd_district` VALUES ('81', '小坝子镇', null, '2020-05-29 04:42:36', null, '77', 'street');
+INSERT INTO `yd_district` VALUES ('82', '篾厂乡', null, '2020-05-29 04:42:36', null, '77', 'street');
+INSERT INTO `yd_district` VALUES ('83', '八寨镇', null, '2020-05-29 04:42:36', null, '77', 'street');
+INSERT INTO `yd_district` VALUES ('84', '仁和镇', null, '2020-05-29 04:42:36', null, '77', 'street');
+INSERT INTO `yd_district` VALUES ('85', '大栗树乡', null, '2020-05-29 04:42:36', null, '77', 'street');
+INSERT INTO `yd_district` VALUES ('86', '都龙镇', null, '2020-05-29 04:42:36', null, '77', 'street');
+INSERT INTO `yd_district` VALUES ('87', '夹寒箐镇', null, '2020-05-29 04:42:36', null, '77', 'street');
+INSERT INTO `yd_district` VALUES ('88', '木厂镇', null, '2020-05-29 04:42:36', null, '77', 'street');
+INSERT INTO `yd_district` VALUES ('89', '坡脚镇', null, '2020-05-29 04:42:36', null, '77', 'street');
+INSERT INTO `yd_district` VALUES ('90', '马白镇', null, '2020-05-29 04:42:36', null, '77', 'street');
+INSERT INTO `yd_district` VALUES ('91', '麻栗坡县', null, '2020-05-29 04:42:36', null, '1', 'district');
+INSERT INTO `yd_district` VALUES ('92', '大坪镇', null, '2020-05-29 04:42:36', null, '91', 'street');
+INSERT INTO `yd_district` VALUES ('93', '杨万乡', null, '2020-05-29 04:42:36', null, '91', 'street');
+INSERT INTO `yd_district` VALUES ('94', '马街乡', null, '2020-05-29 04:42:36', null, '91', 'street');
+INSERT INTO `yd_district` VALUES ('95', '下金厂乡', null, '2020-05-29 04:42:36', null, '91', 'street');
+INSERT INTO `yd_district` VALUES ('96', '铁厂乡', null, '2020-05-29 04:42:36', null, '91', 'street');
+INSERT INTO `yd_district` VALUES ('97', '八布乡', null, '2020-05-29 04:42:36', null, '91', 'street');
+INSERT INTO `yd_district` VALUES ('98', '天保镇', null, '2020-05-29 04:42:37', null, '91', 'street');
+INSERT INTO `yd_district` VALUES ('99', '猛硐瑶族乡', null, '2020-05-29 04:42:37', null, '91', 'street');
+INSERT INTO `yd_district` VALUES ('100', '麻栗镇', null, '2020-05-29 04:42:37', null, '91', 'street');
+INSERT INTO `yd_district` VALUES ('101', '六河乡', null, '2020-05-29 04:42:37', null, '91', 'street');
+INSERT INTO `yd_district` VALUES ('102', '董干镇', null, '2020-05-29 04:42:37', null, '91', 'street');
+INSERT INTO `yd_district` VALUES ('103', '富宁县', null, '2020-05-29 04:42:37', null, '1', 'district');
+INSERT INTO `yd_district` VALUES ('104', '阿用乡', null, '2020-05-29 04:42:37', null, '103', 'street');
+INSERT INTO `yd_district` VALUES ('105', '里达镇', null, '2020-05-29 04:42:37', null, '103', 'street');
+INSERT INTO `yd_district` VALUES ('106', '田蓬镇', null, '2020-05-29 04:42:37', null, '103', 'street');
+INSERT INTO `yd_district` VALUES ('107', '新华镇', null, '2020-05-29 04:42:37', null, '103', 'street');
+INSERT INTO `yd_district` VALUES ('108', '归朝镇', null, '2020-05-29 04:42:37', null, '103', 'street');
+INSERT INTO `yd_district` VALUES ('109', '花甲乡', null, '2020-05-29 04:42:37', null, '103', 'street');
+INSERT INTO `yd_district` VALUES ('110', '那能乡', null, '2020-05-29 04:42:37', null, '103', 'street');
+INSERT INTO `yd_district` VALUES ('111', '洞波瑶族乡', null, '2020-05-29 04:42:37', null, '103', 'street');
+INSERT INTO `yd_district` VALUES ('112', '者桑乡', null, '2020-05-29 04:42:37', null, '103', 'street');
+INSERT INTO `yd_district` VALUES ('113', '板仑乡', null, '2020-05-29 04:42:37', null, '103', 'street');
+INSERT INTO `yd_district` VALUES ('114', '木央镇', null, '2020-05-29 04:42:37', null, '103', 'street');
+INSERT INTO `yd_district` VALUES ('115', '谷拉乡', null, '2020-05-29 04:42:37', null, '103', 'street');
+INSERT INTO `yd_district` VALUES ('116', '剥隘镇', null, '2020-05-29 04:42:37', null, '103', 'street');
+
+-- ----------------------------
+-- Table structure for `yd_freight_train`
+-- ----------------------------
+DROP TABLE IF EXISTS `yd_freight_train`;
+CREATE TABLE `yd_freight_train` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `license_plate` varchar(255) DEFAULT NULL COMMENT '车牌号',
+  `create_time` datetime DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='车辆信息';
+
+-- ----------------------------
+-- Records of yd_freight_train
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `yd_information`
+-- ----------------------------
+DROP TABLE IF EXISTS `yd_information`;
+CREATE TABLE `yd_information` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `transport_id` int(10) DEFAULT NULL COMMENT '运单id',
+  `user_id` int(10) DEFAULT NULL COMMENT '用户id',
+  `type` int(2) DEFAULT NULL COMMENT '类型： 1.停车超时 2.电量低 3.丢失 4.拆卸 5.车辆出发 6.待收货 7.已收货',
+  `content` varchar(255) DEFAULT NULL COMMENT '内容',
+  `create_time` datetime DEFAULT NULL,
+  `is_read` int(1) DEFAULT '1' COMMENT '是否已读：1.未读 2.已读',
+  `status` int(1) DEFAULT '0' COMMENT '是否有效：0.有效 1.无效',
+  `parent_ids` varchar(255) DEFAULT NULL COMMENT '所属上级机构标识',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='消息表';
+
+-- ----------------------------
+-- Records of yd_information
+-- ----------------------------
+INSERT INTO `yd_information` VALUES ('1', '51', '116', '1', '来自车辆(京4454)', '2020-06-12 15:37:24', '1', '0', null);
+
+-- ----------------------------
+-- Table structure for `yd_org_purchase_region`
+-- ----------------------------
+DROP TABLE IF EXISTS `yd_org_purchase_region`;
+CREATE TABLE `yd_org_purchase_region` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `org_id` bigint(20) DEFAULT NULL COMMENT '组织id',
+  `village_name` varchar(255) DEFAULT NULL COMMENT '收购范围村名称',
+  `group_name` varchar(255) DEFAULT NULL COMMENT '收购范围小组名称',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '修改时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=351 DEFAULT CHARSET=utf8 COMMENT='组织与收购区域的关系';
+
+-- ----------------------------
+-- Records of yd_org_purchase_region
+-- ----------------------------
+INSERT INTO `yd_org_purchase_region` VALUES ('7', '6', null, '三组', '2020-06-01 01:57:04', '2020-06-01 01:57:04');
+INSERT INTO `yd_org_purchase_region` VALUES ('8', '6', null, '四组', '2020-06-01 01:57:04', '2020-06-01 01:57:04');
+INSERT INTO `yd_org_purchase_region` VALUES ('31', '3', null, '三组', '2020-06-01 02:39:20', '2020-06-01 02:39:20');
+INSERT INTO `yd_org_purchase_region` VALUES ('32', '3', null, '四组', '2020-06-01 02:39:20', '2020-06-01 02:39:20');
+INSERT INTO `yd_org_purchase_region` VALUES ('33', '3', null, '五组', '2020-06-01 02:40:06', '2020-06-01 02:40:06');
+INSERT INTO `yd_org_purchase_region` VALUES ('34', '3', null, '六组', '2020-06-01 02:40:06', '2020-06-01 02:40:06');
+INSERT INTO `yd_org_purchase_region` VALUES ('37', '9', null, 'a组', '2020-06-01 05:01:51', '2020-06-01 05:01:51');
+INSERT INTO `yd_org_purchase_region` VALUES ('38', '9', null, 'b组', '2020-06-01 05:01:51', '2020-06-01 05:01:51');
+INSERT INTO `yd_org_purchase_region` VALUES ('41', '10', null, 'a组', '2020-06-01 05:06:19', '2020-06-01 05:06:19');
+INSERT INTO `yd_org_purchase_region` VALUES ('42', '10', null, 'b组', '2020-06-01 05:06:19', '2020-06-01 05:06:19');
+INSERT INTO `yd_org_purchase_region` VALUES ('49', '14', null, '三组', '2020-06-03 00:45:27', '2020-06-03 00:45:27');
+INSERT INTO `yd_org_purchase_region` VALUES ('50', '14', null, '四组', '2020-06-03 00:45:28', '2020-06-03 00:45:28');
+INSERT INTO `yd_org_purchase_region` VALUES ('71', '28', null, '三组', '2020-06-03 01:25:19', '2020-06-03 01:25:19');
+INSERT INTO `yd_org_purchase_region` VALUES ('72', '28', null, '四组', '2020-06-03 01:25:19', '2020-06-03 01:25:19');
+INSERT INTO `yd_org_purchase_region` VALUES ('73', '32', null, '三组', '2020-06-03 01:25:28', '2020-06-03 01:25:28');
+INSERT INTO `yd_org_purchase_region` VALUES ('74', '32', null, '四组', '2020-06-03 01:25:28', '2020-06-03 01:25:28');
+INSERT INTO `yd_org_purchase_region` VALUES ('75', '36', null, '三组', '2020-06-03 01:25:31', '2020-06-03 01:25:31');
+INSERT INTO `yd_org_purchase_region` VALUES ('76', '36', null, '四组', '2020-06-03 01:25:31', '2020-06-03 01:25:31');
+INSERT INTO `yd_org_purchase_region` VALUES ('85', '43', null, '三组', '2020-06-03 03:00:01', '2020-06-03 03:00:01');
+INSERT INTO `yd_org_purchase_region` VALUES ('86', '43', null, '四组', '2020-06-03 03:00:01', '2020-06-03 03:00:01');
+INSERT INTO `yd_org_purchase_region` VALUES ('87', '47', null, '三组', '2020-06-03 03:00:05', '2020-06-03 03:00:05');
+INSERT INTO `yd_org_purchase_region` VALUES ('88', '47', null, '四组', '2020-06-03 03:00:05', '2020-06-03 03:00:05');
+INSERT INTO `yd_org_purchase_region` VALUES ('103', '6', null, '三组', '2020-06-04 09:58:52', '2020-06-04 09:58:52');
+INSERT INTO `yd_org_purchase_region` VALUES ('104', '6', null, '三组', '2020-06-04 09:58:52', '2020-06-04 09:58:52');
+INSERT INTO `yd_org_purchase_region` VALUES ('105', '23', null, '小分队:0', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('106', '23', null, '小分队:1', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('107', '23', null, '小分队:2', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('108', '23', null, '小分队:3', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('109', '23', null, '小分队:4', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('110', '23', null, '小分队:5', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('111', '23', null, '小分队:6', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('112', '23', null, '小分队:7', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('113', '23', null, '小分队:8', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('114', '23', null, '小分队:9', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('115', '23', null, '小分队:10', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('116', '23', null, '小分队:11', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('117', '23', null, '小分队:12', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('118', '23', null, '小分队:13', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('119', '23', null, '小分队:14', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('120', '23', null, '小分队:15', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('121', '23', null, '小分队:16', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('122', '23', null, '小分队:17', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('123', '23', null, '小分队:18', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('124', '23', null, '小分队:19', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('125', '23', null, '小分队:20', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('126', '23', null, '小分队:21', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('127', '23', null, '小分队:22', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('128', '23', null, '小分队:23', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('129', '23', null, '小分队:24', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('130', '23', null, '小分队:25', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('131', '23', null, '小分队:26', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('132', '23', null, '小分队:27', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('133', '23', null, '小分队:28', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('134', '23', null, '小分队:29', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('135', '23', null, '小分队:30', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('136', '23', null, '小分队:31', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('137', '23', null, '小分队:32', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('138', '23', null, '小分队:33', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('139', '23', null, '小分队:34', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('140', '23', null, '小分队:35', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('141', '23', null, '小分队:36', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('142', '23', null, '小分队:37', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('143', '23', null, '小分队:38', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('144', '23', null, '小分队:39', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('145', '23', null, '小分队:40', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('146', '23', null, '小分队:41', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('147', '23', null, '小分队:42', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('148', '23', null, '小分队:43', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('149', '23', null, '小分队:44', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('150', '23', null, '小分队:45', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('151', '23', null, '小分队:46', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('152', '23', null, '小分队:47', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('153', '23', null, '小分队:48', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('154', '23', null, '小分队:49', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('155', '23', null, '小分队:50', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('156', '23', null, '小分队:51', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('157', '23', null, '小分队:52', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('158', '23', null, '小分队:53', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('159', '23', null, '小分队:54', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('160', '23', null, '小分队:55', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('161', '23', null, '小分队:56', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('162', '23', null, '小分队:57', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('163', '23', null, '小分队:58', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('164', '23', null, '小分队:59', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('165', '23', null, '小分队:60', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('166', '23', null, '小分队:61', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('167', '23', null, '小分队:62', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('168', '23', null, '小分队:63', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('169', '23', null, '小分队:64', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('170', '23', null, '小分队:65', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('171', '23', null, '小分队:66', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('172', '23', null, '小分队:67', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('173', '23', null, '小分队:68', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('174', '23', null, '小分队:69', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('175', '23', null, '小分队:70', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('176', '23', null, '小分队:71', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('177', '23', null, '小分队:72', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('178', '23', null, '小分队:73', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('179', '23', null, '小分队:74', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('180', '23', null, '小分队:75', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('181', '23', null, '小分队:76', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('182', '23', null, '小分队:77', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('183', '23', null, '小分队:78', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('184', '23', null, '小分队:79', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('185', '23', null, '小分队:80', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('186', '23', null, '小分队:81', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('187', '23', null, '小分队:82', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('188', '23', null, '小分队:83', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('189', '23', null, '小分队:84', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('190', '23', null, '小分队:85', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('191', '23', null, '小分队:86', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('192', '23', null, '小分队:87', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('193', '23', null, '小分队:88', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('194', '23', null, '小分队:89', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('195', '23', null, '小分队:90', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('196', '23', null, '小分队:91', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('197', '23', null, '小分队:92', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('198', '23', null, '小分队:93', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('199', '23', null, '小分队:94', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('200', '23', null, '小分队:95', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('201', '23', null, '小分队:96', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('202', '23', '大兴村', '第一组', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('203', '23', '大兴村', '第二组', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('204', '23', '大兴村', '第三组', '2020-06-04 10:17:14', '2020-06-04 10:17:14');
+INSERT INTO `yd_org_purchase_region` VALUES ('333', '68', '测试村2', '三组', '2020-06-04 13:26:43', '2020-06-04 13:26:43');
+INSERT INTO `yd_org_purchase_region` VALUES ('334', '68', '测试村2', '四组', '2020-06-04 13:26:43', '2020-06-04 13:26:43');
+INSERT INTO `yd_org_purchase_region` VALUES ('335', '72', '测试村2', '三组', '2020-06-04 13:27:34', '2020-06-04 13:27:34');
+INSERT INTO `yd_org_purchase_region` VALUES ('336', '72', '测试村2', '四组', '2020-06-04 13:27:34', '2020-06-04 13:27:34');
+INSERT INTO `yd_org_purchase_region` VALUES ('337', '76', '测试村2', '三组', '2020-06-04 13:27:37', '2020-06-04 13:27:37');
+INSERT INTO `yd_org_purchase_region` VALUES ('338', '76', '测试村2', '四组', '2020-06-04 13:27:37', '2020-06-04 13:27:37');
+INSERT INTO `yd_org_purchase_region` VALUES ('339', '80', '测试村2', '三组', '2020-06-04 13:27:38', '2020-06-04 13:27:38');
+INSERT INTO `yd_org_purchase_region` VALUES ('340', '80', '测试村2', '四组', '2020-06-04 13:27:38', '2020-06-04 13:27:38');
+INSERT INTO `yd_org_purchase_region` VALUES ('341', '84', '测试村2', '三组', '2020-06-04 13:27:44', '2020-06-04 13:27:44');
+INSERT INTO `yd_org_purchase_region` VALUES ('342', '84', '测试村2', '四组', '2020-06-04 13:27:44', '2020-06-04 13:27:44');
+INSERT INTO `yd_org_purchase_region` VALUES ('346', '18', '大兴村', '三组', '2020-06-04 13:45:19', '2020-06-04 13:45:19');
+INSERT INTO `yd_org_purchase_region` VALUES ('347', '18', '大兴村', '四组', '2020-06-04 13:45:19', '2020-06-04 13:45:19');
+INSERT INTO `yd_org_purchase_region` VALUES ('348', '18', '大兴村', '五组', '2020-06-04 13:45:19', '2020-06-04 13:45:19');
+INSERT INTO `yd_org_purchase_region` VALUES ('349', '90', '测试村2', '三组', '2020-06-04 13:45:23', '2020-06-04 13:45:23');
+INSERT INTO `yd_org_purchase_region` VALUES ('350', '90', '测试村2', '四组', '2020-06-04 13:45:23', '2020-06-04 13:45:23');
+
+-- ----------------------------
+-- Table structure for `yd_organization`
+-- ----------------------------
+DROP TABLE IF EXISTS `yd_organization`;
+CREATE TABLE `yd_organization` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `org_name` varchar(255) DEFAULT NULL COMMENT '组织名称',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `parent_id` bigint(20) NOT NULL COMMENT '父id',
+  `org_full_name` varchar(255) DEFAULT NULL COMMENT '全称',
+  `order_num` int(11) DEFAULT NULL COMMENT '排序字段',
+  `org_code` varchar(255) DEFAULT NULL COMMENT '企业编码',
+  `org_type` varchar(255) NOT NULL COMMENT '组织类型1:企业2:烟站3:复烤厂4:仓库',
+  `org_district_id` int(255) DEFAULT NULL COMMENT '归属区域id',
+  `org_longitude` varchar(255) DEFAULT NULL COMMENT '经度',
+  `org_latitude` varchar(255) DEFAULT NULL COMMENT '纬度',
+  `org_address` varchar(500) DEFAULT NULL COMMENT '公司具体地址',
+  `org_tele` varchar(255) DEFAULT NULL COMMENT '电话',
+  `offical_user_id` bigint(20) DEFAULT NULL COMMENT '公司负责人id',
+  `offical_user_name` varchar(255) DEFAULT NULL COMMENT '公司负责人名称',
+  `org_comments` mediumtext COMMENT '组织备注信息',
+  `org_status` int(6) NOT NULL DEFAULT '1' COMMENT '状态:1正常0停用',
+  `is_del` int(11) NOT NULL DEFAULT '0' COMMENT '0:未删除1:删除',
+  `storehouse_volume` varchar(255) DEFAULT NULL COMMENT '仓库容积(单位:千克)',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='组织机构';
+
+-- ----------------------------
+-- Records of yd_organization
+-- ----------------------------
+INSERT INTO `yd_organization` VALUES ('1', '文山烟草公司', '2020-05-28 08:44:43', '2020-05-27 20:11:41', '0', '云南省烟草公司文山州公司', null, 'wsycgs', '1', null, '121.555062', '43.446176', '云南省烟草公司文山州公司', '18101211349', null, null, null, '1', '0', null);
+INSERT INTO `yd_organization` VALUES ('2', '砚山县分公司', '2020-05-28 08:44:43', '2020-05-28 08:44:43', '1', '云南省烟草公司文山州公司砚山县分公司', null, 'ysxfgs', '1', null, '121.557062', '43.456376', '云南省烟草公司文山州公司', '18101211349', null, null, null, '1', '0', null);
+INSERT INTO `yd_organization` VALUES ('3', '平远烟站洪福点', '2020-05-28 08:44:43', '2020-06-01 02:39:20', '2', '平远烟叶工作站洪福收购点', null, 'pyhfd', '2', '8', '121.550962', '43.458176', '云南省烟草公司文山州公司', '18101211349', null, null, null, '1', '0', null);
+INSERT INTO `yd_organization` VALUES ('4', '云南复烤公司', '2020-05-28 08:44:43', '2020-05-28 08:44:43', '0', '云南烟叶复烤有限责任公司', null, 'ynfkgs', '1', null, '121.551062', '43.453176', '云南省烟草公司文山州公司', '18101211349', null, null, null, '1', '0', null);
+INSERT INTO `yd_organization` VALUES ('5', '文山复烤厂', '2020-05-28 08:44:43', '2020-05-28 08:44:43', '4', '文山州复烤厂', null, 'wsfkc', '3', null, '121.550062', '43.456176', '云南省烟草公司文山州公司', '18101211349', null, null, null, '1', '0', null);
+INSERT INTO `yd_organization` VALUES ('6', '洪福一号仓库', '2020-06-12 13:56:36', '2020-06-12 13:56:39', '3', '洪福一号仓库', null, null, '4', '8', null, null, '云南省烟草公司文山州公司', '18101211349', null, null, null, '1', '0', '1000');
+INSERT INTO `yd_organization` VALUES ('7', '洪福二号仓库', '2020-06-12 13:57:30', '2020-06-12 13:57:32', '3', '洪福二号仓库', null, null, '4', '8', null, null, '云南省烟草公司文山州公司', '18101211349', null, null, null, '1', '0', '1000');
+
+-- ----------------------------
+-- Table structure for `yd_tobacco`
+-- ----------------------------
+DROP TABLE IF EXISTS `yd_tobacco`;
+CREATE TABLE `yd_tobacco` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `tobacco_name` varchar(255) DEFAULT NULL COMMENT '烟叶名称',
+  `tobacco_level` varchar(255) DEFAULT NULL COMMENT '烟叶等级',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='烟叶信息';
+
+-- ----------------------------
+-- Records of yd_tobacco
+-- ----------------------------
+INSERT INTO `yd_tobacco` VALUES ('1', '中桔一', 'C1F', '2020-05-20 00:42:03', null);
+INSERT INTO `yd_tobacco` VALUES ('2', '中桔二', 'C2F', '2020-05-20 00:43:19', null);
+INSERT INTO `yd_tobacco` VALUES ('3', '中桔三', 'C3F', '2020-05-20 00:43:19', null);
+
+-- ----------------------------
+-- Table structure for `yd_transport`
+-- ----------------------------
+DROP TABLE IF EXISTS `yd_transport`;
+CREATE TABLE `yd_transport` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `org_id` int(10) NOT NULL COMMENT '组织机构id',
+  `send_id` int(10) NOT NULL COMMENT '发货方id',
+  `send_name` varchar(50) NOT NULL COMMENT '发货方名称',
+  `receive_id` int(10) NOT NULL COMMENT '收货方id',
+  `receive_name` varchar(50) NOT NULL COMMENT '收货方名称',
+  `device_no` varchar(20) NOT NULL COMMENT '车载设备编号',
+  `car_no` varchar(20) NOT NULL COMMENT '车牌号',
+  `dispatch_no` varchar(255) NOT NULL COMMENT '调度单号',
+  `transport_no` varchar(255) NOT NULL COMMENT '运单号',
+  `estime` int(10) DEFAULT NULL COMMENT '预计用时(秒)',
+  `driver_name` varchar(20) DEFAULT NULL COMMENT '驾驶员姓名',
+  `driver_mobile` varchar(20) DEFAULT NULL COMMENT '驾驶员手机号',
+  `transport_state` int(2) DEFAULT '1' COMMENT '运单状态 1.待装车 2.已装车 3.在途中 4.待收货5.已收货',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `depart_time` datetime DEFAULT NULL COMMENT '出发时间',
+  `arrive_time` datetime DEFAULT NULL COMMENT '到达时间',
+  `finsh_time` datetime DEFAULT NULL COMMENT '完成时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `status` int(1) DEFAULT '0' COMMENT '状态：0.有效 1.无效',
+  `remarks` varchar(2000) DEFAULT NULL COMMENT '备注',
+  `loader_id` int(10) DEFAULT NULL COMMENT '装车读写设备id',
+  `weight` varchar(20) DEFAULT NULL COMMENT '总重(担)',
+  `goods_type` varchar(10) DEFAULT NULL COMMENT '物品类型(烟框/烟包)',
+  `goods_num` int(10) DEFAULT NULL COMMENT '物品数量',
+  `parent_ids` varchar(255) DEFAULT NULL COMMENT '所属上级机构标识',
+  PRIMARY KEY (`id`),
+  KEY `orgIds_index` (`parent_ids`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8 COMMENT='运单表';
+
+-- ----------------------------
+-- Records of yd_transport
+-- ----------------------------
+INSERT INTO `yd_transport` VALUES ('50', '3', '3', '平远烟站洪福点', '5', '文山复烤厂', 'CZSB123456789', '京A123456', '987654', 'PYYZHFD20200612140045', '10800', '杨', '13041068280', '4', '2020-06-12 01:00:46', '2020-06-12 01:03:23', null, null, '2020-06-12 01:03:23', '0', null, '0', '0', '', '100', '-1-2-3-');
+INSERT INTO `yd_transport` VALUES ('51', '3', '3', '平远烟站洪福点', '5', '文山复烤厂', 'd001001', '云G25416', 'GHS875439451', 'PYYZHFD20200612142107', '5400', 'Android', '15711499315', '3', '2020-06-12 01:21:08', '2020-06-12 01:40:58', null, null, '2020-06-12 01:40:58', '0', null, '0', '40', '烟包', '100', '-1-2-3-');
+INSERT INTO `yd_transport` VALUES ('52', '3', '3', '平远烟站洪福点', '1', '文山烟草公司', 'CZ001', '云D4399', 'DD459357852', 'PYYZHFD20200612145317', '3000', 'Android', '15711499315', '3', '2020-06-12 01:53:17', '2020-06-12 02:06:37', null, null, '2020-06-12 02:06:37', '0', null, '0', '40', '烟包', '100', '-1-2-3-');
+INSERT INTO `yd_transport` VALUES ('53', '3', '3', '平远烟站洪福点', '5', '文山复烤厂', 'CZ002', '云H158746', 'JH5487635', 'PYYZHFD20200612151039', '3600', 'Android', '15711499315', '3', '2020-06-12 02:10:40', '2020-06-12 02:11:06', null, null, '2020-06-12 02:11:06', '0', null, '1', '80', '烟包', '100', '-1-2-3-');
+INSERT INTO `yd_transport` VALUES ('54', '3', '3', '平远烟站洪福点', '5', '文山复烤厂', 'CZ003', '云D003003', 'DD56874259', 'PYYZHFD20200612152048', '3000', 'Android', '15711499315', '3', '2020-06-12 02:20:48', '2020-06-12 02:21:12', null, null, '2020-06-12 02:21:12', '0', null, '1', '120', '烟包', '100', '-1-2-3-');
+INSERT INTO `yd_transport` VALUES ('55', '3', '3', '平远烟站洪福点', '5', '文山复烤厂', 'CZSB12138', '京A12138', '0612-1530', 'PYYZHFD20200612153006', '10800', '杨', '13071068280', '1', '2020-06-12 02:30:07', null, null, null, null, '0', null, null, null, null, null, '-1-2-3-');
+INSERT INTO `yd_transport` VALUES ('56', '3', '3', '平远烟站洪福点', '5', '文山复烤厂', 'CZSB12138', '京A12138', '0612-1530', 'PYYZHFD20200612153221', '10800', '杨', '13071068280', '2', '2020-06-12 02:32:21', '2020-06-12 02:55:16', null, null, '2020-06-12 02:55:16', '0', null, null, null, null, null, '-1-2-3-');
+INSERT INTO `yd_transport` VALUES ('57', '3', '3', '平远烟站洪福点', '5', '文山复烤厂', 'CZSB12138', '京A12138', '0612-1530', 'PYYZHFD20200612154259', '10800', '杨', '13071068280', '1', '2020-06-12 02:43:00', null, null, null, null, '0', null, null, null, null, null, '-1-2-3-');
+INSERT INTO `yd_transport` VALUES ('58', '3', '3', '平远烟站洪福点', '5', '文山复烤厂', 'CZSB12138', '京A12138', '0612-1530', 'PYYZHFD20200612154317', '10800', '杨', '13071068280', '2', '2020-06-12 02:43:18', '2020-06-12 02:47:26', null, null, '2020-06-12 02:47:26', '0', null, '0', null, null, '0', '-1-2-3-');
+INSERT INTO `yd_transport` VALUES ('59', '3', '3', '平远烟站洪福点', '5', '文山复烤厂', 'CZSB12138', '京A12138', '0612-1530', 'PYYZHFD20200612154839', '10800', '杨', '13071068280', '2', '2020-06-12 02:48:39', '2020-06-12 03:02:59', null, null, '2020-06-12 03:02:59', '0', null, null, null, null, null, '-1-2-3-');
+INSERT INTO `yd_transport` VALUES ('60', '3', '3', '平远烟站洪福点', '5', '文山复烤厂', 'CZSB12138', '京A12138', '0612-1530', 'PYYZHFD20200612154947', '10800', '杨', '13071068280', '2', '2020-06-12 02:49:47', '2020-06-12 03:08:19', null, null, '2020-06-12 03:08:19', '0', null, null, null, null, null, '-1-2-3-');
+INSERT INTO `yd_transport` VALUES ('61', '3', '3', '平远烟站洪福点', '5', '文山复烤厂', 'CZSB12138', '京A12138', '612-166', 'PYYZHFD20200612160624', '10800', '杨', '13071068280', '1', '2020-06-12 03:06:24', null, null, null, null, '0', null, null, null, null, null, '-1-2-3-');
+INSERT INTO `yd_transport` VALUES ('62', '3', '3', '平远烟站洪福点', '5', '文山复烤厂', 'CZSB12138', '京A12138', '612-167', 'PYYZHFD20200612160748', '10800', '杨', '13071068280', '1', '2020-06-12 03:07:48', null, null, null, null, '0', null, null, null, null, null, '-1-2-3-');
+INSERT INTO `yd_transport` VALUES ('63', '3', '3', '平远烟站洪福点', '5', '文山复烤厂', 'CZSB12138', '京A12138', '612-184', 'PYYZHFD20200612180455', '10800', '杨', '13071068280', '4', '2020-06-12 05:04:55', '2020-06-12 05:09:11', null, null, '2020-06-12 05:09:11', '0', null, '0', '80', '烟包', '100', '-1-2-3-');
+
+-- ----------------------------
+-- Table structure for `yd_transport_goods`
+-- ----------------------------
+DROP TABLE IF EXISTS `yd_transport_goods`;
+CREATE TABLE `yd_transport_goods` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `transport_id` int(10) NOT NULL COMMENT '运单id',
+  `rfid` varchar(20) DEFAULT NULL COMMENT '文山扣',
+  `goods_state` int(1) DEFAULT NULL COMMENT '物品状态：1.物品在车 2.物品异常 3.物品丢失',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8 COMMENT='运单-物品表';
+
+-- ----------------------------
+-- Records of yd_transport_goods
+-- ----------------------------
+INSERT INTO `yd_transport_goods` VALUES ('53', '50', '123456', '1', '2020-06-12 01:03:23');
+INSERT INTO `yd_transport_goods` VALUES ('54', '50', '1324', '1', '2020-06-12 01:03:23');
+INSERT INTO `yd_transport_goods` VALUES ('55', '51', '123456', '1', '2020-06-12 01:40:58');
+INSERT INTO `yd_transport_goods` VALUES ('56', '51', '1324', '1', '2020-06-12 01:40:58');
+INSERT INTO `yd_transport_goods` VALUES ('57', '52', '123456', '1', '2020-06-12 02:06:37');
+INSERT INTO `yd_transport_goods` VALUES ('58', '52', '1324', '1', '2020-06-12 02:06:37');
+INSERT INTO `yd_transport_goods` VALUES ('59', '53', '123456', '1', '2020-06-12 02:11:06');
+INSERT INTO `yd_transport_goods` VALUES ('60', '53', '1324', '1', '2020-06-12 02:11:06');
+INSERT INTO `yd_transport_goods` VALUES ('61', '54', '123456', '1', '2020-06-12 02:21:12');
+INSERT INTO `yd_transport_goods` VALUES ('62', '54', '1324', '1', '2020-06-12 02:21:12');
+INSERT INTO `yd_transport_goods` VALUES ('63', '63', '123456', '1', '2020-06-12 05:09:11');
+INSERT INTO `yd_transport_goods` VALUES ('64', '63', '1324', '1', '2020-06-12 05:09:11');
+
+-- ----------------------------
+-- Table structure for `yd_transport_log`
+-- ----------------------------
+DROP TABLE IF EXISTS `yd_transport_log`;
+CREATE TABLE `yd_transport_log` (
+  `id` int(10) NOT NULL AUTO_INCREMENT COMMENT '主键id',
+  `transport_id` int(10) DEFAULT NULL COMMENT '运单id',
+  `create_time` datetime DEFAULT NULL COMMENT '录入时间',
+  `msg` varchar(255) DEFAULT NULL COMMENT '日志信息',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='运单日志表';
+
+-- ----------------------------
+-- Records of yd_transport_log
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for `yd_user`
+-- ----------------------------
+DROP TABLE IF EXISTS `yd_user`;
+CREATE TABLE `yd_user` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `user_name` varchar(255) DEFAULT NULL COMMENT '用户姓名',
+  `user_login_account` varchar(255) NOT NULL COMMENT '登录账号',
+  `user_mobile` varchar(255) DEFAULT NULL COMMENT '用户手机号',
+  `user_comments` mediumtext COMMENT '用户信息备注',
+  `user_pwd` varchar(255) NOT NULL COMMENT '用户密码',
+  `user_org_id` int(11) NOT NULL COMMENT '所属组织id',
+  `user_org_name` varchar(255) DEFAULT NULL COMMENT '所属组织名称(冗余)',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `user_status` int(6) NOT NULL DEFAULT '1' COMMENT '状态:1正常0停用',
+  `role_id` bigint(11) DEFAULT NULL COMMENT '角色id,暂时不用',
+  `is_del` int(11) DEFAULT '0' COMMENT '0:未删除1:删除',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `login_account` (`user_login_account`)
+) ENGINE=InnoDB AUTO_INCREMENT=119 DEFAULT CHARSET=utf8 COMMENT='用户信息';
+
+-- ----------------------------
+-- Records of yd_user
+-- ----------------------------
+INSERT INTO `yd_user` VALUES ('1', '测试132', 'admin', '18322286700', '备注', '21232f297a57a5a743894a0e4a801fc3', '1', null, null, '2020-06-09 04:28:45', '1', '1', '0');
+INSERT INTO `yd_user` VALUES ('2', '金', 'jin', '18322286703', '备注', '84fff20659999e2b83b45c6851ec57dd', '3', '山东公司', '2020-05-19 21:50:30', null, '1', '2', '0');
+INSERT INTO `yd_user` VALUES ('3', '金', 'abc', '18322286703', '备注:e20b5d7d06674dd39dbac90fd703a8bd', '84fff20659999e2b83b45c6851ec57dd', '3', '山东公司', '2020-05-19 22:00:33', null, '1', '0', '0');
+INSERT INTO `yd_user` VALUES ('103', '测试', 'abcf', '18322286706', '备注', '84fff20659999e2b83b45c6851ec57dd', '1', null, '2020-05-19 22:08:58', null, '1', '1', '0');
+INSERT INTO `yd_user` VALUES ('104', '测试1', 'abce', '18322286707', '备注', '84fff20659999e2b83b45c6851ec57dd', '1', null, '2020-05-19 22:10:56', null, '1', '1', '0');
+INSERT INTO `yd_user` VALUES ('105', '测试1', 'abcd', '18322286707', '备注', '84fff20659999e2b83b45c6851ec57dd', '1', null, '2020-05-21 23:08:06', null, '1', '1', '0');
+INSERT INTO `yd_user` VALUES ('106', '测试1', '18322286707', '18322286707', '备注', 'e10adc3949ba59abbe56e057f20f883e', '1', '测试公司1', '2020-05-26 02:32:37', '2020-05-26 02:54:14', '1', '1', '0');
+INSERT INTO `yd_user` VALUES ('107', 'test', 'test', null, '测试', '96e79218965eb72c92a549dd5a330112', '2', '砚山县分公司', null, null, '1', null, '0');
+INSERT INTO `yd_user` VALUES ('108', '测试12345', 'test12345', '17600073180', '这是备注，选填', '96e79218965eb72c92a549dd5a330112', '1', null, '2020-06-04 21:31:43', null, '1', '12138', '0');
+INSERT INTO `yd_user` VALUES ('109', '李明', 'liming', '18101211349', '角色收货员', '96e79218965eb72c92a549dd5a330112', '2', '砚山县分公司', '2020-06-09 10:38:48', null, '1', null, '0');
+INSERT INTO `yd_user` VALUES ('110', '烟站小李', 'xiaoli', '12322444', '测试烟站员工', '96e79218965eb72c92a549dd5a330112', '3', '平远烟站', null, null, '1', null, '0');
+INSERT INTO `yd_user` VALUES ('111', '测试2', 'lishimin', '18322286707', '备注', '96e79218965eb72c92a549dd5a330112', '1', null, '2020-06-10 20:59:37', null, '1', '1', '0');
+INSERT INTO `yd_user` VALUES ('112', '测试2', 'zhudi', '18322286707', '备注', '96e79218965eb72c92a549dd5a330112', '1', '文山烟草公司', '2020-06-10 21:04:27', null, '1', '1', '0');
+INSERT INTO `yd_user` VALUES ('114', '子松', 'zs', '322444424', '测试专用', '96e79218965eb72c92a549dd5a330112', '3', '平远烟站洪福点', null, null, '1', null, '0');
+INSERT INTO `yd_user` VALUES ('116', '发货', 'fh', '43535353', '发货方', '96e79218965eb72c92a549dd5a330112', '3', '平远烟站洪福点', null, null, '1', null, '0');
+INSERT INTO `yd_user` VALUES ('117', '收货', 'sh', '43435', '收货方', '96e79218965eb72c92a549dd5a330112', '5', '文山复烤厂', null, null, '1', null, '0');
+
+-- ----------------------------
+-- Table structure for `yd_user_org_ref`
+-- ----------------------------
+DROP TABLE IF EXISTS `yd_user_org_ref`;
+CREATE TABLE `yd_user_org_ref` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '角色id',
+  `user_id` bigint(20) NOT NULL COMMENT '用户id',
+  `type` varchar(255) DEFAULT NULL COMMENT '类型：web：app',
+  `org_id` bigint(20) NOT NULL COMMENT '组织id',
+  `create_time` datetime DEFAULT NULL COMMENT '创建日期',
+  `update_time` datetime DEFAULT NULL COMMENT '修改日期',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COMMENT='用户-组织-关联关系用于控制数据权限';
+
+-- ----------------------------
+-- Records of yd_user_org_ref
+-- ----------------------------
+INSERT INTO `yd_user_org_ref` VALUES ('10', '2', 'web', '2', '2020-05-21 22:23:59', '2020-05-21 22:23:59');
+INSERT INTO `yd_user_org_ref` VALUES ('11', '2', 'web', '5', '2020-05-21 22:23:59', '2020-05-21 22:23:59');
+INSERT INTO `yd_user_org_ref` VALUES ('13', '5', 'web', '2', '2020-05-21 22:24:08', '2020-05-21 22:24:08');
+INSERT INTO `yd_user_org_ref` VALUES ('14', '5', 'web', '5', '2020-05-21 22:24:08', '2020-05-21 22:24:08');
+INSERT INTO `yd_user_org_ref` VALUES ('16', '5', 'app', '5', '2020-05-21 22:24:25', '2020-05-21 22:24:25');
+INSERT INTO `yd_user_org_ref` VALUES ('17', '107', 'web', '1', null, null);
+INSERT INTO `yd_user_org_ref` VALUES ('18', '107', 'web', '2', null, null);
+
+-- ----------------------------
+-- Table structure for `yd_warn`
+-- ----------------------------
+DROP TABLE IF EXISTS `yd_warn`;
+CREATE TABLE `yd_warn` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `warn_type` varchar(255) DEFAULT NULL COMMENT '告警类型:1:停车超时2:低电量3:丢失4:拆卸',
+  `transport_id` int(11) DEFAULT NULL COMMENT '运单Id',
+  `car_longitude` varchar(255) DEFAULT NULL COMMENT '车辆经度',
+  `car_latitude` varchar(255) DEFAULT NULL COMMENT '车辆维度',
+  `warn_content` varchar(255) DEFAULT NULL COMMENT '告警内容',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '修改时间',
+  `process_state` int(11) DEFAULT '0' COMMENT '处理状态:0未处理1:已处理',
+  `process_user_id` bigint(20) DEFAULT NULL COMMENT '处理人id',
+  `process_user_name` varchar(255) DEFAULT NULL COMMENT '处理人名称',
+  `process_content` varchar(255) DEFAULT NULL COMMENT '处理结果说明',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='告警表';
+
+-- ----------------------------
+-- Records of yd_warn
+-- ----------------------------
+INSERT INTO `yd_warn` VALUES ('1', '1', '5', '33.4232', '23.444', '超时XXX', '2020-06-04 22:46:20', null, '0', null, '测试', 'eeee');
+INSERT INTO `yd_warn` VALUES ('2', '2', '5', '23.4232', '13.444', '丢失XXX', '2020-06-05 00:19:28', null, '0', null, null, null);
+INSERT INTO `yd_warn` VALUES ('3', '3', '5', '33.4232', '43.444', '电量不足', '2020-06-05 00:20:03', '2020-06-05 04:20:37', '1', '2', '金', 'aa');
+INSERT INTO `yd_warn` VALUES ('4', '4', '5', '63.4232', '21.444', '设备被拆卸', '2020-06-08 12:20:44', '2020-06-05 04:18:03', '1', null, null, 'hhhhh');
+INSERT INTO `yd_warn` VALUES ('5', '1', '42', '41.2556', '35.4555', '停车吃饭2小时', '2020-06-10 02:39:32', null, '0', null, null, 'string');
+INSERT INTO `yd_warn` VALUES ('6', '1', '42', '41.2556', '35.4555', '停车吃饭2小时', '2020-06-10 02:42:09', null, '0', null, null, 'string');
+INSERT INTO `yd_warn` VALUES ('7', '1', '51', '41.2556', '35.4555', '超时XXX', '2020-06-12 15:25:59', null, '0', null, null, null);
